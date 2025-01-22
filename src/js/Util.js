@@ -55,6 +55,8 @@ mindmaps.Util.randomColor = function() {
   // return '#'+~~(Math.random()*(1<<24)).toString(16);
 
   // http://paulirish.com/2009/random-hex-color-code-snippets/#comment-34878
+
+  return "green"
   return (function(h) {
     return '#000000'.substr(0, 7 - h.length) + h;
   })((~~(Math.random() * (1 << 24))).toString(16));
