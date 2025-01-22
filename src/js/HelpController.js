@@ -278,6 +278,6 @@ mindmaps.HelpController = function(eventBus, commandRegistry) {
     }
   }
 
-  setupInteractiveMode();
-  setupHelpButton();
+  //setupInteractiveMode();
+  //setupHelpButton();
 };

@@ -50,7 +50,7 @@ mindmaps.ToolBarView = function() {
    * 
    * @param {jQuery} $el
    */
-  this.alignLeft = function($el) {
+  this.alignRight = function($el) {
     $el.appendTo("#toolbar .buttons-left");
   };
 
@@ -153,16 +153,19 @@ mindmaps.ToolBarButton.prototype.asJquery = function() {
   }).button({
     label : this.getTitle(),
     disabled : !this.isEnabled()
-  });
+  }).removeClass()
+      .addClass("btn btn-success")
+      .css("margin-left", "10px")
+  ;
 
-  var icon = this.command.icon;
+/*  var icon = this.command.icon;
   if (icon) {
     $button.button({
       icons : {
         primary : icon
       }
     });
-  }
+  }*/
 
   // callback to update display state
   this.setEnabled = function(enabled) {
@@ -189,13 +192,10 @@ mindmaps.ToolBarMenu = function(title, icon) {
     self.$menu.hide();
   });
 
-  this.$menuButton = $("<button/>").button({
-    label : title,
-    icons : {
-      primary : icon,
-      secondary : "ui-icon-triangle-1-s"
-    }
-  }).appendTo(this.$menuWrapper);
+
+   this.$menuButton = $("<button/>").button({
+      label : title,
+    }).removeClass().addClass("btn btn-success").appendTo(this.$menuWrapper);
 
   this.$menu = $("<div/>", {
     "class" : "menu"
@@ -205,7 +205,7 @@ mindmaps.ToolBarMenu = function(title, icon) {
 
   /**
    * Adds a new button entry to the menu.
-   * 
+   *
    * @param {mindmaps.ToolBarButton|mindmaps.ToolBarButtons[]} buttons a
    *            single button or an array of buttons
    */
@@ -215,8 +215,13 @@ mindmaps.ToolBarMenu = function(title, icon) {
     }
 
     buttons.forEach(function(button) {
-      var $button = button.asJquery().removeClass("ui-corner-all")
-          .addClass("menu-item");
+      var $button = button.asJquery().removeClass().
+      addClass("btn")
+          .addClass("btn-success")
+          .removeClass("ui-corner-all")
+          .addClass("menu-item")
+          .css("text-align", "center")
+      ;
       this.$menu.append($button);
     }, this);
 
@@ -227,7 +232,7 @@ mindmaps.ToolBarMenu = function(title, icon) {
 
   /**
    * Returns the underlying jquery object.
-   * 
+   *
    * @returns {jQuery}
    */
   this.getContent = function() {
@@ -261,36 +266,38 @@ mindmaps.ToolBarPresenter = function(eventBus, commandRegistry, view,
     return commands.map(commandToButton);
   }
 
-  // populate toolbar
-
   // node buttons
-  var nodeCommands = [ mindmaps.CreateNodeCommand, mindmaps.DeleteNodeCommand ];
+  var nodeCommands = [
+    mindmaps.CreateNodeCommand, mindmaps.DeleteNodeCommand, mindmaps.UndoCommand, mindmaps.RedoCommand, mindmaps.CopyNodeCommand,
+    mindmaps.CutNodeCommand, mindmaps.PasteNodeCommand];
   var nodeButtons = commandsToButtons(nodeCommands);
-  view.addButtonGroup(nodeButtons, view.alignLeft);
+  view.addButtonGroup(nodeButtons, view.alignRight);
+
+  // populate toolbar
+  // file menu
+  var fileMenu = new mindmaps.ToolBarMenu("Mind map", "ui-icon-document");
+  var fileCommands = [ mindmaps.NewDocumentCommand,
+    mindmaps.OpenDocumentCommand, mindmaps.SaveDocumentCommand,
+    mindmaps.ExportCommand, mindmaps.PrintCommand,
+    mindmaps.CloseDocumentCommand ];
+  var fileButtons = commandsToButtons(fileCommands);
+  fileMenu.add(fileButtons);
+  view.addMenu(fileMenu);
 
   // undo buttons
-  var undoCommands = [ mindmaps.UndoCommand, mindmaps.RedoCommand ];
+/*  var undoCommands = [ mindmaps.UndoCommand, mindmaps.RedoCommand ];
   var undoButtons = commandsToButtons(undoCommands);
-  view.addButtonGroup(undoButtons, view.alignLeft);
+  view.addButtonGroup(undoButtons, view.alignRight);
 
   // clipboard buttons.
   var clipboardCommands = [ mindmaps.CopyNodeCommand,
       mindmaps.CutNodeCommand, mindmaps.PasteNodeCommand ];
   var clipboardButtons = commandsToButtons(clipboardCommands);
-  view.addButtonGroup(clipboardButtons, view.alignLeft);
+  view.addButtonGroup(clipboardButtons, view.alignRight);*/
 
-  // file menu
-  var fileMenu = new mindmaps.ToolBarMenu("Mind map", "ui-icon-document");
-  var fileCommands = [ mindmaps.NewDocumentCommand,
-      mindmaps.OpenDocumentCommand, mindmaps.SaveDocumentCommand,
-      mindmaps.ExportCommand, mindmaps.PrintCommand,
-      mindmaps.CloseDocumentCommand ];
-  var fileButtons = commandsToButtons(fileCommands);
-  fileMenu.add(fileButtons);
-  view.addMenu(fileMenu);
 
   // help button
-  view.addButton(commandToButton(mindmaps.HelpCommand), view.alignRight);
+  //view.addButton(commandToButton(mindmaps.HelpCommand), view.alignRight);
 
   this.go = function() {
     view.init();
