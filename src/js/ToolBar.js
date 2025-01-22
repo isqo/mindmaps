@@ -186,7 +186,7 @@ mindmaps.ToolBarMenu = function(title, icon) {
   var self = this;
   this.$menuWrapper = $("<span/>", {
     "class" : "menu-wrapper"
-  }).hover(function() {
+  }).css("width","150px" ).css("text-align","center" ).hover(function() {
     self.$menu.show();
   }, function() {
     self.$menu.hide();
