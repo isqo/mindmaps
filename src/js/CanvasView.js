@@ -706,12 +706,12 @@ mindmaps.DefaultCanvasView = function() {
     // handle root differently
     var $text = $getNodeCaption(root);
     var metrics = textMetrics.getTextMetrics(root, this.zoomFactor);
-    $text.css(
+/*    $text.css(
         {
           "font-size" : zoomFactor * 100 + "%",
           "left" : zoomFactor
               * -mindmaps.TextMetrics.ROOT_CAPTION_MIN_WIDTH / 2
-        }).css(metrics);
+        }).css(metrics);*/
 
     root.forEachChild(function(child) {
       scale(child, 1);

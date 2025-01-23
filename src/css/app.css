@@ -239,7 +239,7 @@ html,body {
 }
 
 .mindmap .node-caption.selected {
-  border: 2px solid red;
+  border: 2px solid green;
   padding: 2px;
   z-index: 1000;
   webkit-box-shadow: 3px 3px 7px #828282;
@@ -254,7 +254,7 @@ html,body {
 .mindmap .node-caption.root {
   cursor: default;
   background: white;
-  border: 3px solid orange;
+  border: 3px solid green;
   border-radius: 10px 10px 10px 10px;
   left: -50px;
   position: absolute;
@@ -262,7 +262,7 @@ html,body {
 }
 
 .mindmap .node-caption.root.selected {
-  border-color: red;
+  border-color: green;
 }
 
 .mindmap .node-caption.root.edit {
@@ -322,6 +322,8 @@ html,body {
 #creator-nub {
   width: 24px;
   height: 24px;
+  margin-bottom: 10px;
+  margin-left: -1px;
   background-image: url("../img/creator-nub-sprite.png");
   background-repeat: no-repeat;
   position: relative;
@@ -374,6 +376,16 @@ html,body {
   box-shadow: none;
   z-index: 1000;
   width: auto !important;
+}
+
+.ui-widget-header-updated {
+
+  background-color: #198754;
+  color: white;
+}
+
+.ui-dialog-title-updated {
+  font-size: 12px;
 }
 
 .float-panel div.ui-dialog-titlebar {
