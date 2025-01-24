@@ -282,16 +282,16 @@ mindmaps.DefaultCanvasView = function() {
     // canvases)
 
     var detach = false;
-    if (detach) {
-      // detach drawing area during map creation to avoid unnecessary DOM
-      // repaint events. (binary7 is 3 times faster)
-      var $parent = $drawingArea.parent();
-      $drawingArea.detach();
-      self.createNode(root, $drawingArea);
-      $drawingArea.appendTo($parent);
-    } else {
-      self.createNode(root, $drawingArea);
-    }
+      if (detach) {
+        // detach drawing area during map creation to avoid unnecessary DOM
+        // repaint events. (binary7 is 3 times faster)
+        var $parent = $drawingArea.parent();
+        $drawingArea.detach();
+        self.createNode(root, $drawingArea);
+        $drawingArea.appendTo($parent);
+      } else {
+        self.createNode(root, $drawingArea);
+      }
 
     console.debug("draw map ms: ", new Date().getTime() - now);
   };
@@ -324,6 +324,8 @@ mindmaps.DefaultCanvasView = function() {
     }).css({
       "font-size" : node.text.font.size
     });
+
+    $node.appendTo($parent);
     $node.appendTo($parent);
 
     if (node.isRoot()) {

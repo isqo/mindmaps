@@ -28,7 +28,7 @@ mindmaps.StatusBarView = function() {
       if (self.buttonClicked) {
         self.buttonClicked(id);
       }
-    }).prependTo($statusbar.find(".buttons"));
+    }).removeClass().addClass("btn btn-success").css("margin-left:","   1px;").prependTo($statusbar.find(".buttons"));
   };
 
   /**

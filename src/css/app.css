@@ -146,6 +146,10 @@ html,body {
   color: #1C4257;
 }
 
+#statusbar-button-1 {
+  margin-right: 5px;
+}
+
 #bottombar {
   position: fixed; /* absolute caused scroll bar, depending on border */
   width: 100%;
@@ -155,6 +159,7 @@ html,body {
 }
 
 #statusbar {
+  background-color: white;
   height: 32px;
 }
 
