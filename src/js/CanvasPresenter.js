@@ -168,7 +168,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
    */
   creator.dragStarted = function(node) {
     // set edge color for new node. inherit from parent or random when root
-    var color = node.isRoot() ? "green"
+    var color = node.isRoot() ? "#14A800"
         : node.branchColor;
     return color;
   };

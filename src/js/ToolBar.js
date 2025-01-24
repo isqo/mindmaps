@@ -154,8 +154,10 @@ mindmaps.ToolBarButton.prototype.asJquery = function() {
     label : this.getTitle(),
     disabled : !this.isEnabled()
   }).removeClass()
-      .addClass("btn btn-success")
+      .addClass("btn")
       .css("margin-left", "10px")
+      .css("background-color",'#00740C')
+      .css("color","white")
   ;
 
 /*  var icon = this.command.icon;
@@ -195,7 +197,7 @@ mindmaps.ToolBarMenu = function(title, icon) {
 
    this.$menuButton = $("<button/>").button({
       label : title,
-    }).removeClass().addClass("btn btn-success").appendTo(this.$menuWrapper);
+    }).removeClass().addClass("btn").css("background-color","#00740C").css("color","white").appendTo(this.$menuWrapper);
 
   this.$menu = $("<div/>", {
     "class" : "menu"
@@ -217,7 +219,7 @@ mindmaps.ToolBarMenu = function(title, icon) {
     buttons.forEach(function(button) {
       var $button = button.asJquery().removeClass().
       addClass("btn")
-          .addClass("btn-success")
+          .addClass("alignRightsuccess")
           .removeClass("ui-corner-all")
           .addClass("menu-item")
           .css("text-align", "center")
