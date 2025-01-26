@@ -990,4 +990,5 @@ mindmaps.DefaultCanvasView = function() {
 };
 
 // inherit from base canvas view
-mindmaps.DefaultCanvasView.prototype = new mindmaps.CanvasView();
+if(mindmaps.isAuth)
+  mindmaps.DefaultCanvasView.prototype = new mindmaps.CanvasView();

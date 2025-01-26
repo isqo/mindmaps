@@ -268,23 +268,26 @@ mindmaps.ToolBarPresenter = function(eventBus, commandRegistry, view,
     return commands.map(commandToButton);
   }
 
-  // node buttons
-  var nodeCommands = [
-    mindmaps.CreateNodeCommand, mindmaps.DeleteNodeCommand, mindmaps.UndoCommand, mindmaps.RedoCommand, mindmaps.CopyNodeCommand,
-    mindmaps.CutNodeCommand, mindmaps.PasteNodeCommand];
-  var nodeButtons = commandsToButtons(nodeCommands);
-  view.addButtonGroup(nodeButtons, view.alignRight);
+  if(mindmaps.isAuth){
+    // node buttons
+    var nodeCommands = [
+      mindmaps.CreateNodeCommand, mindmaps.DeleteNodeCommand, mindmaps.UndoCommand, mindmaps.RedoCommand, mindmaps.CopyNodeCommand,
+      mindmaps.CutNodeCommand, mindmaps.PasteNodeCommand];
+    var nodeButtons = commandsToButtons(nodeCommands);
+    view.addButtonGroup(nodeButtons, view.alignRight);
+
+    // file menu
+    var fileMenu = new mindmaps.ToolBarMenu("Mind map", "ui-icon-document");
+    var fileCommands = [ mindmaps.NewDocumentCommand,
+      mindmaps.OpenDocumentCommand, mindmaps.SaveDocumentCommand,
+      mindmaps.ExportCommand, mindmaps.PrintCommand,
+      mindmaps.CloseDocumentCommand ];
+    var fileButtons = commandsToButtons(fileCommands);
+    fileMenu.add(fileButtons);
+    view.addMenu(fileMenu);
+  }
 
   // populate toolbar
-  // file menu
-  var fileMenu = new mindmaps.ToolBarMenu("Mind map", "ui-icon-document");
-  var fileCommands = [ mindmaps.NewDocumentCommand,
-    mindmaps.OpenDocumentCommand, mindmaps.SaveDocumentCommand,
-    mindmaps.ExportCommand, mindmaps.PrintCommand,
-    mindmaps.CloseDocumentCommand ];
-  var fileButtons = commandsToButtons(fileCommands);
-  fileMenu.add(fileButtons);
-  view.addMenu(fileMenu);
 
   // undo buttons
 /*  var undoCommands = [ mindmaps.UndoCommand, mindmaps.RedoCommand ];
