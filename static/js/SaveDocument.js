@@ -150,6 +150,7 @@ mindmaps.SaveDocumentPresenter = function(eventBus, mindmapModel, view, autosave
 
     var filename = mindmapModel.getMindMap().getRoot().getCaption() + ".json";
     var content = mindmapModel.getDocument().prepareSave().serialize();
+
     var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
     window.saveAs(blob, filename);
 

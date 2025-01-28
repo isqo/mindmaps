@@ -254,11 +254,32 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_MOVED, function(node) {
+      var filename = mindmapModel.getMindMap().getRoot().getCaption() + ".json";
+      var content = mindmapModel.getDocument().prepareSave().serialize();
+      //alert(content)
       view.positionNode(node);
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_TEXT_CAPTION_CHANGED, function(
         node) {
+
+      var filename = mindmapModel.getMindMap().getRoot().getCaption() + ".json";
+      var data = mindmapModel.getDocument().prepareSave().serialize();
+      $.ajax({
+        contentType: 'application/json',
+        data: data,
+        dataType: 'json',
+        success: function(data){
+          console(JSON.stringify(data));
+        },
+        error: function(){
+          console.log("Device control failed");
+        },
+        processData: false,
+        type: 'POST',
+        url: '/api/savedocument'
+      });
+
       view.setNodeText(node, node.getCaption());
 
       // redraw node in case height has changed
@@ -285,6 +306,24 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
         // attach creator manually, sometimes the mouseover listener wont fire
         creator.attachToNode(node);
         view.editNodeCaption(node);
+
+        var filename = mindmapModel.getMindMap().getRoot().getCaption() + ".json";
+        var data = mindmapModel.getDocument().prepareSave().serialize();
+        $.ajax({
+          contentType: 'application/json',
+          data: data,
+          dataType: 'json',
+          success: function(data){
+            console.log(JSON.stringify(data));
+          },
+          error: function(){
+            console.log("Device control failed");
+          },
+          processData: false,
+          type: 'POST',
+          url: '/api/savedocument'
+        });
+
       }
     });
 

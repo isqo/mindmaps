@@ -71,6 +71,10 @@ def index():
   else:
     return render_template('index.html')
 
+@app.route("/gallery")
+def gallery():
+    return render_template('gallery.html')
+
 
 def get_google_provider_cfg():
   return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -179,7 +183,6 @@ def protected():
   username = get_jwt_identity()
   return jsonify({'hello': 'from {}'.format(username)}), 200
 
-
 @app.route('/token/refresh', methods=['POST'])
 def refresh():
   # Create the new access token
@@ -192,6 +195,17 @@ def refresh():
   set_access_cookies(resp, access_token)
   return resp, 200
 
+@app.route('/api/savedocument', methods=['POST'])
+@login_required
+def saveDocument():
+  print(request.json)
+  return (request.json, 200)
+
+@app.route('/api/getdocuments', methods=['GET'])
+@login_required
+def getDocuments():
+  print(request.json)
+  return (request.json, 200)
 
 if __name__ == "__main__":
   app.run(ssl_context="adhoc")

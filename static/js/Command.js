@@ -331,6 +331,7 @@ mindmaps.CloseDocumentCommand = function() {
   this.id = "CLOSE_DOCUMENT_COMMAND";
   this.label = "Close";
   this.icon = "ui-icon-close";
+  this.enabled = true;
   this.description = "Close the mind map";
 };
 mindmaps.CloseDocumentCommand.prototype = new mindmaps.Command();
