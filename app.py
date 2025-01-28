@@ -1,0 +1,197 @@
+# Python standard libraries
+import json
+import os
+import sqlite3
+
+import requests
+# Third-party libraries
+from flask import Flask, redirect, request, url_for, g, jsonify, make_response, render_template
+from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, \
+  get_jwt_identity, unset_jwt_cookies, JWTManager, jwt_required
+from flask_login import (
+  LoginManager,
+  current_user,
+  login_required,
+  login_user,
+  logout_user,
+)
+from oauthlib.oauth2 import WebApplicationClient
+
+# Internal imports
+from db import init_db_command
+from user import User
+
+# Configuration
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+
+GOOGLE_DISCOVERY_URL = (
+  "https://accounts.google.com/.well-known/openid-configuration"
+)
+
+# Flask app setup
+app = Flask(__name__, static_url_path='/')
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
+jwt = JWTManager(app)
+
+# User session management setup
+# https://flask-login.readthedocs.io/en/latest
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# Naive database setup
+try:
+  init_db_command()
+except sqlite3.OperationalError:
+  # Assume it's already been created
+  pass
+
+# OAuth 2 client setup
+client = WebApplicationClient(GOOGLE_CLIENT_ID)
+
+
+@app.before_request
+def before_request():
+  if current_user.is_authenticated:
+    g.user = current_user.get_id()
+  else:
+    g.user = None
+
+
+# Flask-Login helper to retrieve a user from our db
+@login_manager.user_loader
+def load_user(user_id):
+  return User.get(user_id)
+
+
+@app.route("/")
+def index():
+  if current_user.is_authenticated:
+    return render_template('treemap.html')
+  else:
+    return render_template('index.html')
+
+
+def get_google_provider_cfg():
+  return requests.get(GOOGLE_DISCOVERY_URL).json()
+
+
+@app.route("/login")
+def login():
+  # Find out what URL to hit for Google login
+  google_provider_cfg = get_google_provider_cfg()
+  authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+
+  # Use library to construct the request for Google login and provide
+  # scopes that let you retrieve user's profile from Google
+  request_uri = client.prepare_request_uri(
+    authorization_endpoint,
+    redirect_uri=request.base_url + "/callback",
+    scope=["openid", "email", "profile"],
+  )
+  return redirect(request_uri)
+
+
+@app.route("/login/callback")
+def callback():
+  # Get authorization code Google sent back to you
+  code = request.args.get("code")
+  # Find out what URL to hit to get tokens that allow you to ask for
+  # things on behalf of a user
+  google_provider_cfg = get_google_provider_cfg()
+  token_endpoint = google_provider_cfg["token_endpoint"]
+
+  # Prepare and send a request to get tokens! Yay tokens!
+  token_url, headers, body = client.prepare_token_request(
+    token_endpoint,
+    authorization_response=request.url,
+    redirect_url=request.base_url,
+    code=code
+  )
+  token_response = requests.post(
+    token_url,
+    headers=headers,
+    data=body,
+    auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
+  )
+
+  # Parse the tokens!
+  client.parse_request_body_response(json.dumps(token_response.json()))
+
+  # Now that you have tokens (yay) let's find and hit the URL
+  # from Google that gives you the user's profile information,
+  # including their Google profile image and email
+  userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
+  uri, headers, body = client.add_token(userinfo_endpoint)
+  userinfo_response = requests.get(uri, headers=headers, data=body)
+
+  # You want to make sure their email is verified.
+  # The user authenticated with Google, authorized your
+  # app, and now you've verified their email through Google!
+  if userinfo_response.json().get("email_verified"):
+    unique_id = userinfo_response.json()["sub"]
+    users_email = userinfo_response.json()["email"]
+    picture = userinfo_response.json()["picture"]
+    users_name = userinfo_response.json()["given_name"]
+  else:
+    return "User email not available or not verified by Google.", 400
+
+  # Create a user in your db with the information provided
+  # by Google
+  user = User(
+    id_=unique_id, name=users_name, email=users_email, profile_pic=picture
+  )
+
+  # Doesn't exist? Add it to the database.
+  if not User.get(unique_id):
+    User.create(unique_id, users_name, users_email, picture)
+
+  # Create the tokens we will be sending back to the user
+  access_token = create_access_token(identity=users_name)
+  refresh_token = create_refresh_token(identity=users_name)
+
+  # Set the JWTs and the CSRF double submit protection cookies
+  # in this response
+  resp = jsonify({'login': True})
+  set_access_cookies(resp, access_token)
+  set_refresh_cookies(resp, refresh_token)
+
+  # Begin user session by logging the user in
+  login_user(user)
+
+  response = make_response(redirect(url_for("index")))
+  response.set_cookie('access_token', access_token)
+  response.set_cookie('refresh_token', refresh_token)
+  return response
+
+
+@app.route("/logout")
+@login_required
+def logout():
+  logout_user()
+  resp = jsonify({'logout': True})
+  unset_jwt_cookies(resp)
+  return redirect(url_for("index"))
+
+@app.route('/api/example', methods=['GET'])
+@jwt_required
+def protected():
+  username = get_jwt_identity()
+  return jsonify({'hello': 'from {}'.format(username)}), 200
+
+
+@app.route('/token/refresh', methods=['POST'])
+def refresh():
+  # Create the new access token
+  current_user = get_jwt_identity()
+  access_token = create_access_token(identity=current_user)
+
+  # Set the access JWT and CSRF double submit protection cookies
+  # in this response
+  resp = jsonify({'refresh': True})
+  set_access_cookies(resp, access_token)
+  return resp, 200
+
+
+if __name__ == "__main__":
+  app.run(ssl_context="adhoc")

@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "jake": "^8.0.15",
+    "jwt-decode": "^4.0.0",
     "uglify-js": "^3.3.27"
   },
   "devDependencies": {
