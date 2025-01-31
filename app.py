@@ -71,6 +71,10 @@ def index():
   else:
     return render_template('index.html')
 
+@app.route("/my-gallery")
+def Mygallery():
+  return render_template('mygallery.html')
+
 @app.route("/gallery")
 def gallery():
     return render_template('gallery.html')
