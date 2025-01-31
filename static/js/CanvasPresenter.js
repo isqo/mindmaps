@@ -265,29 +265,20 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
       var filename = mindmapModel.getMindMap().getRoot().getCaption() + ".json";
       var data = mindmapModel.getDocument().prepareSave().serialize();
-      $.ajax({
-        contentType: 'application/json',
-        data: data,
-        dataType: 'json',
-        success: function(data){
-          console(JSON.stringify(data));
-        },
-        error: function(){
-          console.log("Device control failed");
-        },
-        processData: false,
-        type: 'POST',
-        url: '/api/savedocument'
-      });
 
       view.setNodeText(node, node.getCaption());
+
 
       // redraw node in case height has changed
       // TODO maybe only redraw if height has changed
       view.redrawNodeConnectors(node);
+
+      mindmapModel.saveToLocalStorage();
+
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_CREATED, function(node) {
+
       view.createNode(node);
 
       // edit node caption immediately if requested
@@ -309,22 +300,9 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
         var filename = mindmapModel.getMindMap().getRoot().getCaption() + ".json";
         var data = mindmapModel.getDocument().prepareSave().serialize();
-        $.ajax({
-          contentType: 'application/json',
-          data: data,
-          dataType: 'json',
-          success: function(data){
-            console.log(JSON.stringify(data));
-          },
-          error: function(){
-            console.log("Device control failed");
-          },
-          processData: false,
-          type: 'POST',
-          url: '/api/savedocument'
-        });
 
       }
+
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node, parent) {
@@ -340,16 +318,18 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       if (parent.isLeaf()) {
         view.removeFoldButton(parent);
       }
+
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_SELECTED, selectNode);
-    
     eventBus.subscribe(mindmaps.Event.NODE_OPENED, function(node) {
       view.openNode(node);
+      mindmapModel.saveToLocalStorage();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_CLOSED, function(node) {
       view.closeNode(node);
+      mindmapModel.saveToLocalStorage();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_FONT_CHANGED, function(node) {
@@ -374,6 +354,44 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       view.applyViewZoom();
       view.scaleMap();
     });
+
+    eventBus.subscribe(mindmaps.Event.NODE_CREATED, function(node){
+      mindmapModel.saveToLocalStorage();
+    });
+    eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node){
+      mindmapModel.saveToLocalStorage();
+    });
+
+    eventBus.subscribe(mindmaps.Event.NODE_BRANCH_COLOR_CHANGE, function(node, color) {
+      mindmapModel.saveToLocalStorage();
+    });
+
+    eventBus.subscribe(mindmaps.Event.NODE_FONT_CHANGED, function(node) {
+      mindmapModel.saveToLocalStorage();
+    });
+
+    eventBus.subscribe(mindmaps.Event.NODE_SELECTED, function(node) {
+      mindmapModel.saveToLocalStorage();
+    });
+    eventBus.subscribe(mindmaps.Event.NODE_OPENED, function(node) {
+      mindmapModel.saveToLocalStorage();
+    });
+
+    eventBus.subscribe(mindmaps.Event.NODE_CLOSED, function(node) {
+      mindmapModel.saveToLocalStorage();
+    });
+
+    eventBus.subscribe(mindmaps.Event.NODE_SELECTED, function(node) {
+      mindmapModel.saveToLocalStorage();
+    });
+
+    eventBus.subscribe(mindmaps.Event.NODE_DESELECTED, function(node) {
+      mindmapModel.saveToLocalStorage();
+    });
+    eventBus.subscribe(mindmaps.Event.NODE_MOVED, function(node) {
+      mindmapModel.saveToLocalStorage();
+    });
+
   }
 
   bind();

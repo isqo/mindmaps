@@ -1,14 +1,14 @@
 /**
  * <pre>
  * Creates a new MindMapModel. 
- * 
+ *
  * This object represents the underlying mind map model and provides access 
  * to the document, the mind map and the currently selected node.
- * 
+ *
  * All changes to the mind map pass through this object, either through calling
  * methods directly or using the executeAction() method to perform NodeActions.
  * </pre>
- * 
+ *
  * @constructor
  * @param {mindmaps.EventBus} eventBus
  * @param {mindmaps.CommandRegistry} commandRegistry
@@ -20,7 +20,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
 
   /**
    * Gets the current document.
-   * 
+   *
    * @returns {mindmaps.Document} the current document.
    */
   this.getDocument = function() {
@@ -30,7 +30,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
   /**
    * Sets the current document and will publish a DOCUMENT_OPENED or
    * DOCUMENT_CLOSED event.
-   * 
+   *
    * @param {mindmaps.Document} doc or pass null to close the document
    */
   this.setDocument = function(doc) {
@@ -44,7 +44,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
 
   /**
    * Gets the current mind map associated with the document.
-   * 
+   *
    * @returns {mindmaps.MindMap} the mind map or null
    */
   this.getMindMap = function() {
@@ -56,7 +56,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
 
   /**
    * Initialise.
-   * 
+   *
    * @private
    */
   this.init = function() {
@@ -85,7 +85,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
 
   /**
    * Deletes a node or the currently selected one if no argument is passed.
-   * 
+   *
    * @param {mindmaps.Node} [node] defaults to currently selected.
    */
   this.deleteNode = function(node) {
@@ -101,7 +101,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
    * Attaches a new node the mind map. If invoked without arguments, it will
    * add a new child to the selected node with an automatically generated
    * position.
-   * 
+   *
    * @param {mindmaps.Node} node the new node
    * @param {mindmaps.Node} parent
    */
@@ -139,7 +139,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
 
   /**
    * Sets the node as the currently selected.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.selectNode = function(node) {
@@ -155,7 +155,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
   /**
    * Changes the caption for the passed node or for the selected one if node
    * is null.
-   * 
+   *
    * @param {mindmaps.Node} node
    * @param {String} caption
    */
@@ -172,7 +172,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
    * Executes a node action. An executed action might raise an event over the
    * event bus and cause an undo event to be emitted via
    * MindMapModel#undoAction.
-   * 
+   *
    * @param {mindmaps.Action} action
    */
   this.executeAction = function(action) {
@@ -222,10 +222,17 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
    * @returns {Boolean} whether the save was successful.
    */
   this.saveToLocalStorage = function() {
-    var doc = this.document.prepareSave();
+    mindmaps.LocalDocumentStorage.clear();
+    var doc = null
+    docId=mindmaps.LocalDocumentStorage.getDocumentId()
+    doc=mindmaps.LocalDocumentStorage.loadDocument(docId)
+    if(doc === null){
+      doc = this.document.prepareSave();
+    }
+
     var success = mindmaps.LocalDocumentStorage.saveDocument(doc);
     if (success) {
-      eventBus.publish(mindmaps.Event.DOCUMENT_SAVED, doc);
+      //eventBus.publish(mindmaps.Event.DOCUMENT_SAVED, doc);
     }
 
     return success;

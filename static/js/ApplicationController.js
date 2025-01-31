@@ -14,7 +14,7 @@ function logOut() {
 
 /**
  * Creates a new Application Controller.
- * 
+ *
  * @constructor
  */
 mindmaps.ApplicationController = function() {
@@ -37,7 +37,9 @@ mindmaps.ApplicationController = function() {
   function doNewDocument() {
     // close old document first
     var doc = mindmapModel.getDocument();
+    mindmaps.LocalDocumentStorage.clear();
     doCloseDocument();
+    //mindmaps.LocalDocumentStorage.clear();
 
     var presenter = new mindmaps.NewDocumentPresenter(eventBus,
         mindmapModel, new mindmaps.NewDocumentView());
@@ -121,6 +123,8 @@ mindmaps.ApplicationController = function() {
       closeDocumentCommand.setEnabled(true);
       exportCommand.setEnabled(true);
     });
+
+
   };
 
   /**
@@ -131,7 +135,16 @@ mindmaps.ApplicationController = function() {
         mindmapModel, commandRegistry);
     viewController.go();
 
-    doNewDocument();
+
+
+        documents = mindmaps.LocalDocumentStorage.getDocuments();
+        if (documents.length > 0){
+          var doc = mindmaps.LocalDocumentStorage.getDocuments()[0]
+          mindmapModel.setDocument(doc)
+        }
+        else {
+          doNewDocument();
+        }
   };
 
   this.init();

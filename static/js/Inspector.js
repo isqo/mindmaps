@@ -298,20 +298,6 @@ mindmaps.InspectorPresenter = function(eventBus, mindmapModel, view) {
     var filename = mindmapModel.getMindMap().getRoot().getCaption() + ".json";
     var data = mindmapModel.getDocument().prepareSave().serialize();
 
-    $.ajax({
-      contentType: 'application/json',
-      data: data,
-      dataType: 'json',
-      success: function(data){
-        console.log(JSON.stringify(data));
-      },
-      error: function(){
-        console.log("Device control failed");
-      },
-      processData: false,
-      type: 'POST',
-      url: '/api/savedocument'
-    });
     updateView(node);
   });
 

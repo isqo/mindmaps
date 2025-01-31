@@ -7,7 +7,7 @@ import requests
 # Third-party libraries
 from flask import Flask, redirect, request, url_for, g, jsonify, make_response, render_template
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, \
-  get_jwt_identity, unset_jwt_cookies, JWTManager, jwt_required
+  get_jwt_identity, unset_jwt_cookies, JWTManager
 from flask_login import (
   LoginManager,
   current_user,
@@ -151,61 +151,38 @@ def callback():
     User.create(unique_id, users_name, users_email, picture)
 
   # Create the tokens we will be sending back to the user
-  access_token = create_access_token(identity=users_name)
-  refresh_token = create_refresh_token(identity=users_name)
+  #access_token = create_access_token(identity=users_name)
+  #refresh_token = create_refresh_token(identity=users_name)
 
   # Set the JWTs and the CSRF double submit protection cookies
   # in this response
-  resp = jsonify({'login': True})
-  set_access_cookies(resp, access_token)
-  set_refresh_cookies(resp, refresh_token)
+  #resp = jsonify({'login': True})
+  #set_access_cookies(resp, access_token)
+  #set_refresh_cookies(resp, refresh_token)
 
   # Begin user session by logging the user in
   login_user(user)
 
-  response = make_response(redirect(url_for("index")))
-  response.set_cookie('access_token', access_token)
-  response.set_cookie('refresh_token', refresh_token)
-  return response
+  #response = make_response(redirect(url_for("index")))
+  #response.set_cookie('access_token', access_token)
+  #response.set_cookie('refresh_token', refresh_token)
+  return redirect(url_for("index"))
 
 
 @app.route("/logout")
 @login_required
 def logout():
   logout_user()
-  resp = jsonify({'logout': True})
-  unset_jwt_cookies(resp)
   return redirect(url_for("index"))
 
-@app.route('/api/example', methods=['GET'])
-@jwt_required
-def protected():
-  username = get_jwt_identity()
-  return jsonify({'hello': 'from {}'.format(username)}), 200
-
-@app.route('/token/refresh', methods=['POST'])
-def refresh():
+@app.route('/user/id', methods=['GET'])
+def get_user_id():
   # Create the new access token
-  current_user = get_jwt_identity()
-  access_token = create_access_token(identity=current_user)
-
-  # Set the access JWT and CSRF double submit protection cookies
-  # in this response
-  resp = jsonify({'refresh': True})
-  set_access_cookies(resp, access_token)
+  resp={}
+  if current_user.is_authenticated:
+    resp = current_user.profile_pic
   return resp, 200
-
-@app.route('/api/savedocument', methods=['POST'])
-@login_required
-def saveDocument():
-  print(request.json)
-  return (request.json, 200)
-
-@app.route('/api/getdocuments', methods=['GET'])
-@login_required
-def getDocuments():
-  print(request.json)
-  return (request.json, 200)
 
 if __name__ == "__main__":
   app.run(ssl_context="adhoc")
+
