@@ -51,7 +51,7 @@ mindmaps.ToolBarView = function() {
    *
    * @param {jQuery} $el
    */
-  this.alignRight = function($el) {
+  this.alignLeft = function($el) {
     $el.appendTo("#toolbar .buttons-left");
   };
 
@@ -286,8 +286,9 @@ mindmaps.ToolBarPresenter = function(eventBus, commandRegistry, view,
     fileMenu.add(fileButtons);
     view.addMenu(fileMenu);
 
-    // help button
     view.addButton(commandToButton(mindmaps.LogOut), view.alignRight);
+
+    view.addButton(commandToButton(mindmaps.myGallery), view.alignLeft);
 
   // only show banner on drichard.org
   $('#container').append(

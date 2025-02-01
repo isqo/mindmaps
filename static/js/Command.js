@@ -263,7 +263,22 @@ mindmaps.PasteNodeCommand.prototype = new mindmaps.Command();
  */
 
 /**
- * Creates a new NewDocumentCommand.
+ * My gallery.
+ *
+ * @constructor
+ * @augments mindmaps.Command
+ */
+mindmaps.myGallery = function() {
+  this.id = "MYGALLERY";
+  this.label = "my-gallery";
+  this.description = "My gallery";
+  this.enabled = true;
+};
+mindmaps.myGallery.prototype = new mindmaps.Command();
+
+
+/**
+ * Logout.
  *
  * @constructor
  * @augments mindmaps.Command
