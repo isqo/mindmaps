@@ -36,13 +36,14 @@ mindmaps.ApplicationController = function() {
    */
   function doNewDocument() {
     // close old document first
-    var doc = mindmapModel.getDocument();
-    mindmaps.LocalDocumentStorage.clear();
-    doCloseDocument();
+    //var doc = mindmapModel.getDocument();
+    //mindmaps.LocalDocumentStorage.clear();
+    //doCloseDocument();
     //mindmaps.LocalDocumentStorage.clear();
 
     var presenter = new mindmaps.NewDocumentPresenter(eventBus,
         mindmapModel, new mindmaps.NewDocumentView());
+
     presenter.go();
   }
 

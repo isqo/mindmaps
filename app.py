@@ -72,6 +72,7 @@ def index():
     return render_template('index.html')
 
 @app.route("/my-gallery")
+@login_required
 def Mygallery():
   return render_template('mygallery.html')
 
