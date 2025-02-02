@@ -270,7 +270,7 @@ mindmaps.PasteNodeCommand.prototype = new mindmaps.Command();
  */
 mindmaps.myGallery = function() {
   this.id = "MYGALLERY";
-  this.label = "my-gallery";
+  this.label = "My gallery";
   this.description = "My gallery";
   this.enabled = true;
 };
@@ -323,16 +323,31 @@ mindmaps.OpenDocumentCommand.prototype = new mindmaps.Command();
 
 /**
  * Creates a new SaveDocumentCommand.
+ *
+ * @constructor
+ * @augments mindmaps.Command
+ */
+mindmaps.SaveRemotelyDocumentCommand = function() {
+  this.id = "SAVE_DOCUMENT_REMOTELY_COMMAND";
+  this.label = "Save";
+  this.shortcut = ["ctrl+s", "meta+s"];
+  this.icon = "ui-icon-disk";
+  this.enabled = true;
+  this.description = "Save the mind map remotely";
+};
+mindmaps.SaveRemotelyDocumentCommand.prototype = new mindmaps.Command();
+/**
+ * Creates a new SaveDocumentCommand.
  * 
  * @constructor
  * @augments mindmaps.Command
  */
 mindmaps.SaveDocumentCommand = function() {
   this.id = "SAVE_DOCUMENT_COMMAND";
-  this.label = "Save...";
+  this.label = "Save on your computer";
   this.shortcut = ["ctrl+s", "meta+s"];
   this.icon = "ui-icon-disk";
-  this.description = "Save the mind map";
+  this.description = "Save the mind map locally";
 };
 mindmaps.SaveDocumentCommand.prototype = new mindmaps.Command();
 

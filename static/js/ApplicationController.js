@@ -83,6 +83,10 @@ mindmaps.ApplicationController = function() {
     presenter.go();
   }
 
+    function myGalleryHandler() {
+      document.location.href = '/my-gallery'
+  }
+
   /**
    * Initializes the controller, registers for all commands and subscribes to
    * event bus.
@@ -105,10 +109,14 @@ mindmaps.ApplicationController = function() {
     var closeDocumentCommand = commandRegistry
         .get(mindmaps.CloseDocumentCommand);
     closeDocumentCommand.setHandler(doCloseDocument);
-
-    var closeDocumentCommand = commandRegistry
+    closeDocumentCommand
+    var logOutCommand = commandRegistry
         .get(mindmaps.LogOut);
-    closeDocumentCommand.setHandler(logOut);
+    logOutCommand.setHandler(logOut);
+
+    var  GalleryCommand = commandRegistry
+        .get(mindmaps.myGallery);
+    GalleryCommand.setHandler(myGalleryHandler);
 
     var exportCommand = commandRegistry.get(mindmaps.ExportCommand);
     exportCommand.setHandler(doExportDocument);

@@ -51,7 +51,7 @@
     <script id="template-new" type="text/x-jquery-tmpl">
         <div id="new-dialog" class="file-dialog" title="New mind map">
           <h1>To file</h1>
-          <p>You wanna cancel or confirm.</p>
+          <p>Do you want to create a new one without saving it?.</p>
           <button id="button-new-cancel">cancel</button>
           <button id="button-new-confirm">confirm</button>
         </div>
@@ -149,6 +149,7 @@
 
 </head>
 <body>
+
 <div id="print-area">
     <p class="print-placeholder">Please use the print option from the
         mind map menu</p>
@@ -156,15 +157,9 @@
 <!-- DEBUG -->
 <!-- <div id="debug-warning">Running in DEBUG mode.</div>-->
 <!-- /DEBUG -->
+
 <div id="container">
-    <script>
-        // only show banner on drichard.org
-        if (window.location.hostname === 'drichard.org') {
-            document.write(
-                '<div id="banner"><strong>Attention:</strong> This app is moving soon to <a href="https://www.mindmaps.app" target="_blank">www.mindmaps.app</a>. Mind maps stored in local storage will not be available on the new site. If you have any maps in local storage, please save them to file and import them on the new website. If you have any questions, please <a href="mailto:david+contact@drichard.org">contact me</a>.</div>'
-            );
-        }
-    </script>
+    <a id="test" href="/"></a>
     <div id="topbar">
         <div id="toolbar">
             <div id="logo" style="background-color: #14A800;">
@@ -180,7 +175,9 @@
         </div>
     </div>
     <div id="canvas-container">
-        <div id="drawing-area" class="no-select"></div>
+            <div id="drawing-area" class="no-select">
+            </div>
+
     </div>
     <div id="bottombar">
         <div id="about">
