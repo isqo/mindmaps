@@ -268,6 +268,14 @@ mindmaps.PasteNodeCommand.prototype = new mindmaps.Command();
  * @constructor
  * @augments mindmaps.Command
  */
+mindmaps.mindMapInfo = function() {
+  this.id = "MINDMAP-INFO";
+  this.label = "Mind map info";
+  this.description = "Mind map title and description";
+  this.enabled = true;
+};
+mindmaps.mindMapInfo.prototype = new mindmaps.Command();
+
 mindmaps.myGallery = function() {
   this.id = "MYGALLERY";
   this.label = "My gallery";

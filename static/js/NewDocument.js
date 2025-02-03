@@ -45,12 +45,13 @@ mindmaps.NewDocumentPresenter = function (eventBus, mindmapModel, view) {
 
     $("#button-new-confirm").button().click(function () {
         //mindmaps.LocalDocumentStorage.clear();
-        var doc = new mindmaps.Document();
-        mindmapModel.setDocument(doc);
+       alert("save in progress...")
         view.hideOpenDialog();
     });
 
     $("#button-new-cancel").button().click(function () {
+        var doc = new mindmaps.Document();
+        mindmapModel.setDocument(doc);
         view.hideOpenDialog();
     });
 

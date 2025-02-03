@@ -175,30 +175,62 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route('/user/id', methods=['GET'])
-def get_user_id():
-    # Create the new access token
-    resp = {}
-    if current_user.is_authenticated:
-        resp = current_user.profile_pic
-    return current_user, 200
-
-
 @app.route('/mindmap', methods=['POST'])
 @login_required
 def mindmap():
-    google_user_id = None
+    user_id = None
     if current_user.is_authenticated:
-        google_user_id = current_user.id
-    title = request.args.get('title')
-    description = request.args.get('description')
+        user_id = current_user.id
+
+    map_id = request.args.get('id')
     map = json.dumps(request.json, separators=(',', ':'))
-    mindmap = Mindmap.get(customer_id=google_user_id,title=title)
-    if not mindmap:
-        Mindmap.create(customer_id=google_user_id, title=title, description=description, map=map)
-    if mindmap:
-        Mindmap.updateMap(map,google_user_id,title)
-    return map
+    if map_id:
+        mindmap = Mindmap.getById(map_id)
+        if mindmap:
+            Mindmap.updateMapById(map=map, id=map_id)
+    else:
+        title = "new map"
+        description = "new description"
+        Mindmap.create(customer_id=user_id, title=title, description=description, map=map)
+
+    return "success"
+
+
+@app.route('/mindmap/info', methods=['POST'])
+@login_required
+def mindmap_info():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+    data = request.get_json()
+    map_id = request.args.get('id')
+    description = None
+    title = None
+    if not map_id:
+        raise Exception("map_id is mandatory")
+    print(map_id)
+    if 'title' in data:
+        title = data["title"]
+        print(title)
+    if 'description' in data:
+        description = data["description"]
+        print(description)
+
+    Mindmap.updateInfo(map_id=map_id, customer_id=user_id, title=title, description=description)
+
+    return str(map_id) + title + description
+
+
+@app.route('/mindmap/info', methods=['GET'])
+def get_mindmap_info():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+    map = Mindmap.getById(id=120)
+    response = {"title": map.title, "description": map.description}
+    return response
 
 
 if __name__ == "__main__":

@@ -12,6 +12,23 @@ class Mindmap(UserMixin):
         self.map = map
 
     @staticmethod
+    def getById(id):
+        with db_cursor() as cur:
+            cur.execute(
+                "SELECT * FROM mindmap WHERE mindmap.id = %s", (id,)
+            )
+            mindmap = cur.fetchone()
+
+            if not mindmap:
+                return None
+
+            mindmap = Mindmap(
+                id=mindmap[0], customer_id=mindmap[1], title=mindmap[2], description=mindmap[3], map=mindmap[4]
+            )
+
+        return mindmap
+
+    @staticmethod
     def get(customer_id, title):
         with db_cursor() as cur:
             print("SELECT * FROM Mindmap WHERE customer_id = %s AND title = %s")
@@ -47,4 +64,27 @@ class Mindmap(UserMixin):
                 "WHERE customer_id = %s "
                 "AND title = %s",
                 (map, customer_id, title),
+            )
+    @staticmethod
+    def updateMapById(map, id):
+        with db_cursor() as cur:
+            cur.execute(
+                "UPDATE mindmap "
+                "SET     map = %s "
+                "WHERE id = %s ",
+
+                (map, id),
+            )
+
+
+    @staticmethod
+    def updateInfo(title, description, customer_id, map_id):
+        with db_cursor() as cur:
+            cur.execute(
+                "UPDATE mindmap "
+                "SET     title = %s,"
+                "     description = %s "
+                "WHERE customer_id = %s "
+                "AND  id = %s",
+                (title, description, customer_id, map_id),
             )

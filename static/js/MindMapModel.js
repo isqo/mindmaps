@@ -235,7 +235,7 @@ mindmaps.MindMapModel = function (eventBus, commandRegistry, undoController) {
 
        $.ajax({
             type: 'post',
-            url: 'https://127.0.0.1:5000/mindmap?title=hello',
+            url: 'https://127.0.0.1:5000/mindmap?id=120',
             data: JSON.stringify(doc),
             contentType: "application/json; charset=utf-8",
             success: function (data) {

@@ -82,6 +82,11 @@ mindmaps.ApplicationController = function() {
         mindmapModel, new mindmaps.ExportMapView());
     presenter.go();
   }
+  function mindMapInfoHandler() {
+    var presenter = new mindmaps.MindMapInfoPresenter(eventBus,
+        mindmapModel, new mindmaps.MindMapInfoView());
+    presenter.go();
+  }
 
     function myGalleryHandler() {
       document.location.href = '/my-gallery'
@@ -117,6 +122,10 @@ mindmaps.ApplicationController = function() {
     var  GalleryCommand = commandRegistry
         .get(mindmaps.myGallery);
     GalleryCommand.setHandler(myGalleryHandler);
+
+    var  GalleryCommand = commandRegistry
+        .get(mindmaps.mindMapInfo);
+    GalleryCommand.setHandler(mindMapInfoHandler);
 
     var exportCommand = commandRegistry.get(mindmaps.ExportCommand);
     exportCommand.setHandler(doExportDocument);
