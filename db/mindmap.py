@@ -4,12 +4,31 @@ from db.db import db_cursor
 
 
 class Mindmap(UserMixin):
-    def __init__(self, id, customer_id, title, description, map):
+    def __init__(self, id, uuid, customer_id, title, description, map):
         self.id = id,
+        self.uuid = uuid
         customer_id = customer_id
         self.title = title
         self.description = description
         self.map = map
+
+    @staticmethod
+    def getByUUID(uuid):
+        with db_cursor() as cur:
+            cur.execute(
+                "SELECT * FROM mindmap WHERE mindmap.uuid = %s", (uuid,)
+            )
+            mindmap = cur.fetchone()
+
+            if not mindmap:
+                return None
+
+            print(mindmap[0])
+            mindmap = Mindmap(
+                id=mindmap[0], uuid=mindmap[1], customer_id=mindmap[2], title=mindmap[3], description=mindmap[4],
+                map=mindmap[5]
+            )
+            return mindmap
 
     @staticmethod
     def getById(id):
@@ -23,7 +42,8 @@ class Mindmap(UserMixin):
                 return None
 
             mindmap = Mindmap(
-                id=mindmap[0], customer_id=mindmap[1], title=mindmap[2], description=mindmap[3], map=mindmap[4]
+                id=mindmap[0], uuid=mindmap[1], customer_id=mindmap[2], title=mindmap[3], description=mindmap[4],
+                map=mindmap[5]
             )
 
         return mindmap
@@ -47,12 +67,12 @@ class Mindmap(UserMixin):
         return mindmap
 
     @staticmethod
-    def create(customer_id, title, description, map):
+    def create(map_uuid, customer_id, title, description, map):
         with db_cursor() as cur:
             cur.execute(
-                "INSERT INTO mindmap (customer_id, title, description, map) "
-                "VALUES (%s, %s, %s, %s)",
-                (customer_id, title, description, map),
+                "INSERT INTO mindmap (uuid, customer_id, title, description, map) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (map_uuid, customer_id, title, description, map),
             )
 
     @staticmethod
@@ -65,26 +85,26 @@ class Mindmap(UserMixin):
                 "AND title = %s",
                 (map, customer_id, title),
             )
+
     @staticmethod
-    def updateMapById(map, id):
+    def updateMapById(map, uuid):
         with db_cursor() as cur:
             cur.execute(
                 "UPDATE mindmap "
                 "SET     map = %s "
-                "WHERE id = %s ",
+                "WHERE uuid = %s ",
 
-                (map, id),
+                (map, uuid),
             )
 
-
     @staticmethod
-    def updateInfo(title, description, customer_id, map_id):
+    def updateInfo(uuid, title, description, customer_id):
         with db_cursor() as cur:
             cur.execute(
                 "UPDATE mindmap "
                 "SET     title = %s,"
                 "     description = %s "
                 "WHERE customer_id = %s "
-                "AND  id = %s",
-                (title, description, customer_id, map_id),
+                "AND  uuid = %s",
+                (title, description, customer_id, uuid),
             )

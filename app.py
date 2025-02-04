@@ -182,16 +182,17 @@ def mindmap():
     if current_user.is_authenticated:
         user_id = current_user.id
 
-    map_id = request.args.get('id')
+    map_uuid = request.args.get('uuid')
     map = json.dumps(request.json, separators=(',', ':'))
-    if map_id:
-        mindmap = Mindmap.getById(map_id)
+
+    if map_uuid:
+        mindmap = Mindmap.getByUUID(map_uuid)
         if mindmap:
-            Mindmap.updateMapById(map=map, id=map_id)
-    else:
-        title = "new map"
-        description = "new description"
-        Mindmap.create(customer_id=user_id, title=title, description=description, map=map)
+            Mindmap.updateMapById(map=map, uuid=map_uuid)
+        else:
+            title = "new map"
+            description = "new description"
+            Mindmap.create(map_uuid=map_uuid, customer_id=user_id, title=title, description=description, map=map)
 
     return "success"
 
@@ -204,22 +205,19 @@ def mindmap_info():
         user_id = current_user.id
 
     data = request.get_json()
-    map_id = request.args.get('id')
+    map_uuid = request.args.get('uuid')
     description = None
     title = None
-    if not map_id:
+    if not map_uuid:
         raise Exception("map_id is mandatory")
-    print(map_id)
     if 'title' in data:
         title = data["title"]
-        print(title)
     if 'description' in data:
         description = data["description"]
-        print(description)
 
-    Mindmap.updateInfo(map_id=map_id, customer_id=user_id, title=title, description=description)
+    Mindmap.updateInfo(uuid=map_uuid, customer_id=user_id, title=title, description=description)
 
-    return str(map_id) + title + description
+    return "success"
 
 
 @app.route('/mindmap/info', methods=['GET'])
@@ -228,7 +226,9 @@ def get_mindmap_info():
     if current_user.is_authenticated:
         user_id = current_user.id
 
-    map = Mindmap.getById(id=120)
+    map_uuid = request.args.get('uuid')
+
+    map = Mindmap.getByUUID(uuid=map_uuid)
     response = {"title": map.title, "description": map.description}
     return response
 

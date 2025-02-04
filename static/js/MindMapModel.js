@@ -220,22 +220,14 @@ mindmaps.MindMapModel = function (eventBus, commandRegistry, undoController) {
      * @returns {Boolean} whether the save was successful.
      */
     this.saveToLocalStorage = function () {
-
-        mindmaps.LocalDocumentStorage.clear();
-        var doc = null
-        docId = mindmaps.LocalDocumentStorage.getDocumentId()
-        doc = mindmaps.LocalDocumentStorage.loadDocument(docId)
-        if (doc != null) {
-            mindmaps.LocalDocumentStorage.deleteDocument(doc)
-        }
-
         doc = this.document.prepareSave();
         var success = mindmaps.LocalDocumentStorage.saveDocument(doc);
 
+        mindmaps.LocalDocumentStorage.setMainId(doc.id)
 
        $.ajax({
             type: 'post',
-            url: 'https://127.0.0.1:5000/mindmap?id=120',
+            url: 'https://127.0.0.1:5000/mindmap?uuid='+doc.id,
             data: JSON.stringify(doc),
             contentType: "application/json; charset=utf-8",
             success: function (data) {

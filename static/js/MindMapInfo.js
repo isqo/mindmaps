@@ -5,15 +5,17 @@
 mindmaps.MindMapInfoView = function () {
     var self = this;
 
+
     // create dialog
     var $dialog = $("#template-mind-map-info").tmpl().dialog({
         autoOpen: false, modal: true, zIndex: 5000, width: "auto", height: "auto", close: function () {
             $(this).dialog("destroy");
             $(this).remove();
         }, open: function () {
+            map_uuid=mindmaps.LocalDocumentStorage.getMainId()
             $.ajax({
                 type: 'get',
-                url: 'https://127.0.0.1:5000/mindmap/info?id=120',
+                    url: 'https://127.0.0.1:5000/mindmap/info?uuid='+map_uuid,
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     $('#mindmap-title').val(data.title)
@@ -27,7 +29,7 @@ mindmaps.MindMapInfoView = function () {
             $dialog.dialog("option", "position", "center");
         }, buttons: {
             "Save": function () {
-
+                map_uuid=mindmaps.LocalDocumentStorage.getMainId()
                 title = $('#mindmap-title').val()
                 description = $('#mindmap-description').val()
                 data = {
@@ -35,7 +37,7 @@ mindmaps.MindMapInfoView = function () {
                 }
                 $.ajax({
                     type: 'post',
-                    url: 'https://127.0.0.1:5000/mindmap/info?id=120',
+                    url: 'https://127.0.0.1:5000/mindmap/info?uuid='+map_uuid,
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                 });

@@ -63,6 +63,7 @@ mindmaps.LocalDocumentStorage = (function() {
       if (id === null) {
         return null;
       }
+      return id
     },
 
     setMainId : function(value) {
@@ -70,7 +71,6 @@ mindmaps.LocalDocumentStorage = (function() {
         localStorage.setItem('mainId',value);
         return true;
       } catch (error) {
-        alert("hello")
         // QUOTA_EXCEEDED
         console.error("Error while saving mainId",
             error);
