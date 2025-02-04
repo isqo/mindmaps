@@ -58,6 +58,26 @@ mindmaps.LocalDocumentStorage = (function() {
    * @scope mindmaps.LocalDocumentStorage
    */
   return {
+    getMainId : function() {
+      var id = localStorage.getItem('mainId');
+      if (id === null) {
+        return null;
+      }
+    },
+
+    setMainId : function(value) {
+      try {
+        localStorage.setItem('mainId',value);
+        return true;
+      } catch (error) {
+        alert("hello")
+        // QUOTA_EXCEEDED
+        console.error("Error while saving mainId",
+            error);
+        return false;
+      }
+    },
+
     /**
      * Saves a document to the localstorage. Overwrites the old document if
      * one with the same id exists.

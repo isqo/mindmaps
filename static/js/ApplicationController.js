@@ -41,10 +41,19 @@ mindmaps.ApplicationController = function() {
     //doCloseDocument();
     //mindmaps.LocalDocumentStorage.clear();
 
-    var presenter = new mindmaps.NewDocumentPresenter(eventBus,
-        mindmapModel, new mindmaps.NewDocumentView());
+    var doc = mindmapModel.getDocument()
+    if (doc == null)
+    {
+      var doc = new mindmaps.Document();
+      mindmapModel.setDocument(doc);
+    }
+    else
+    {
+      var presenter = new mindmaps.NewDocumentPresenter(eventBus,
+          mindmapModel, new mindmaps.NewDocumentView());
 
-    presenter.go();
+      presenter.go();
+    }
   }
 
   /**
@@ -152,8 +161,6 @@ mindmaps.ApplicationController = function() {
     var viewController = new mindmaps.MainViewController(eventBus,
         mindmapModel, commandRegistry);
     viewController.go();
-
-
 
         documents = mindmaps.LocalDocumentStorage.getDocuments();
         if (documents.length > 0){
