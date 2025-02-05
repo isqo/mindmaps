@@ -270,7 +270,7 @@ mindmaps.PasteNodeCommand.prototype = new mindmaps.Command();
  */
 mindmaps.mindMapInfo = function() {
   this.id = "MINDMAP-INFO";
-  this.label = "Mind map info";
+  this.label = "Mind map description";
   this.description = "Mind map title and description";
   this.enabled = true;
 };
@@ -278,7 +278,7 @@ mindmaps.mindMapInfo.prototype = new mindmaps.Command();
 
 mindmaps.myGallery = function() {
   this.id = "MYGALLERY";
-  this.label = "My gallery";
+  this.label = "My Gallery";
   this.description = "My gallery";
   this.enabled = true;
 };

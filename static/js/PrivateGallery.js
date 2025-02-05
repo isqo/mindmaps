@@ -29,22 +29,29 @@ docs.forEach(function (doc, index) {
             var uuid = data.uuid
 
             if (title == null || description == null) {
-                title = "<a href=\"#\" uuid=" + uuid + " onclick=\"return switchDoc($(this));\">" + "not yet saved" + "</a>"
-                description = "<a href=\"#\" uuid=" + uuid + " onclick=\"return switchDoc($(this));\">Save your project now?</a>"
-                removeLink = "<a style='float: right; font-size: 15px;' uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\">delete</a>"
+                title = "<p uuid=" + uuid + ">" + "not yet saved" + "</p>"
+                description = "<p uuid=" + uuid + " style=\"white-space: nowrap;overflow: hidden;\">Save your project now?</p>"
+                //removeLink = "<a style='float: right; font-size: 15px;' uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\">delete</a>"
                 targetRemoval = "<div card-uuid=\"" + uuid + "\" class=\"col-4\" style=\"margin-bottom: 10px\">"
             } else {
-                title = "<a href=\"#\" uuid=" + uuid + " onclick=\"return switchDoc($(this));\">" + title + "</a>"
-                description = "<a href=\"#\" uuid=" + uuid + " onclick=\"return switchDoc($(this));\">" + description + "</a>"
-                removeLink = "<a style='float: right; font-size: 15px;' uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\">delete</a>"
+                title = "<p  uuid=" + uuid + " onclick=\"return switchDoc($(this));\">" + title + "</p>"
+                description = "<p uuid=" + uuid + " style=\"white-space: nowrap;overflow: hidden;\">" + description + "</p>"
+               // removeLink = "<a style='float: right; font-size: 15px;' uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\">delete</a>"
                 targetRemoval = "<div card-uuid=\"" + uuid + "\" class=\"col-4\" style=\"margin-bottom: 10px\">"
             }
 
+            removeLink = "<button type=\"button\" class=\"btn-close\" aria-label=\"Close\"" +
+                " style=\"float: right; font-size: 10px;\" uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\" ></button>"
 
-            $("#my-gallery").append(" " + targetRemoval + " <div class=\"card h-100\"> " + "<div class=\"card-header\">" + removeLink + "</div>" + "<div id=\"my-img-" + index + "\"> " + "</div> " + "<div class=\"card-body\" id=\"card-body\">" + " <h5 class=\"card-title\">" + title + "</h5>" + " <p class=\"card-text\">" + description + "</p> </div> </div> </div>")
+            $("#my-gallery").append(" " + targetRemoval + " <div class=\"card h-100\"> "
+                + "<div class=\"card-header\">" + removeLink + "</div>"
+                + "<a uuid=\"" + uuid + "\" onclick=\"return switchDoc($(this));\" id=\"my-img-" + index + "\" href='#'> "
+                + "</a> " + "<div class=\"card-body\" id=\"card-body\">"
+                + " <h5 class=\"card-title\">" + title + "</h5>"
+                + " <div class=\"card-text\">" + description + "</div> </div> </div> </div>")
 
 
-            $("#my-img-" + index).html($img.css("height", "120px").css("width", "120px"))
+            $("#my-img-" + index).html($img.css("height", "200px").css("width", "200px"))
         },
         error: function (err) {
             console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
@@ -54,18 +61,25 @@ docs.forEach(function (doc, index) {
 });
 
 function remove(value) {
-    url = 'https://127.0.0.1:5000/mindmap/remove?uuid=' + value.attr("uuid")
-    $.ajax({
-        type: 'DELETE', url: url, contentType: "application/json; charset=utf-8", success: function (data) {
-            uuid = value.attr("uuid")
-            $("[card-uuid=" + uuid + "]").remove()
-            mindmaps.LocalDocumentStorage.deleteDocumentById(uuid)
-        }, error: function (err) {
-            console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+    $.confirm({
+        title: 'Confirm!', content: 'Simple confirm!', buttons: {
+            confirm: function () {
+                url = 'https://127.0.0.1:5000/mindmap/remove?uuid=' + value.attr("uuid")
+                $.ajax({
+                    type: 'DELETE', url: url, contentType: "application/json; charset=utf-8", success: function (data) {
+                        uuid = value.attr("uuid")
+                        $("[card-uuid=" + uuid + "]").remove()
+                        mindmaps.LocalDocumentStorage.deleteDocumentById(uuid)
+                    }, error: function (err) {
+                        console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+                    }
+
+                });
+
+            }, cancel: function () {
+            }
         }
-
     });
-
 
 }
 
