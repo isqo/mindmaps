@@ -4,7 +4,9 @@ $.ajax({
     contentType: "application/json; charset=utf-8",
     success: function (dicts) {
         for (var dict in dicts) {
-            mindmaps.LocalDocumentStorage.saveDocumentNotSerializable(dicts[dict]["map"])
+            map = dicts[dict]["map"]
+            json = mindmaps.Document.fromObject(map)
+            mindmaps.LocalDocumentStorage.saveDocument(json)
         }
     },
     error: function (err) {
@@ -36,19 +38,13 @@ docs.forEach(function (doc, index) {
             } else {
                 title = "<p  uuid=" + uuid + " onclick=\"return switchDoc($(this));\">" + title + "</p>"
                 description = "<p uuid=" + uuid + " style=\"white-space: nowrap;overflow: hidden;\">" + description + "</p>"
-               // removeLink = "<a style='float: right; font-size: 15px;' uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\">delete</a>"
+                // removeLink = "<a style='float: right; font-size: 15px;' uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\">delete</a>"
                 targetRemoval = "<div card-uuid=\"" + uuid + "\" class=\"col-4\" style=\"margin-bottom: 10px\">"
             }
 
-            removeLink = "<button type=\"button\" class=\"btn-close\" aria-label=\"Close\"" +
-                " style=\"float: right; font-size: 10px;\" uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\" ></button>"
+            removeLink = "<button type=\"button\" class=\"btn-close\" aria-label=\"Close\"" + " style=\"float: right; font-size: 10px;\" uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\" ></button>"
 
-            $("#my-gallery").append(" " + targetRemoval + " <div class=\"card h-100\"> "
-                + "<div class=\"card-header\">" + removeLink + "</div>"
-                + "<a uuid=\"" + uuid + "\" onclick=\"return switchDoc($(this));\" id=\"my-img-" + index + "\" href='#'> "
-                + "</a> " + "<div class=\"card-body\" id=\"card-body\">"
-                + " <h5 class=\"card-title\">" + title + "</h5>"
-                + " <div class=\"card-text\">" + description + "</div> </div> </div> </div>")
+            $("#my-gallery").append(" " + targetRemoval + " <div class=\"card h-100\"> " + "<div class=\"card-header\">" + removeLink + "</div>" + "<a uuid=\"" + uuid + "\" onclick=\"return switchDoc($(this));\" id=\"my-img-" + index + "\" href='#'> " + "</a> " + "<div class=\"card-body\" id=\"card-body\">" + " <h5 class=\"card-title\">" + title + "</h5>" + " <div class=\"card-text\">" + description + "</div> </div> </div> </div>")
 
 
             $("#my-img-" + index).html($img.css("height", "200px").css("width", "200px"))

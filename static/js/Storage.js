@@ -97,18 +97,6 @@ mindmaps.LocalDocumentStorage = (function() {
         return false;
       }
     },
-    saveDocumentNotSerializable : function(doc) {
-      try {
-        localStorage.setItem(prefix + doc.id, JSON.stringify(doc));
-        return true;
-      } catch (error) {
-        // QUOTA_EXCEEDED
-        console.error("Error while saving document to local storage",
-            error);
-        return false;
-      }
-    },
-
 
     /**
      * Loads a document from the local storage.
