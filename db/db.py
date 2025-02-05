@@ -14,8 +14,8 @@ dbpool = psycopg2.pool.ThreadedConnectionPool(host=DB_HOST,
                                               dbname=DB_NAME,
                                               user=DB_USER,
                                               password=DB_PASS,
-                                              minconn=2,
-                                              maxconn=5
+                                              minconn=10,
+                                              maxconn=50
                                               );
 
 

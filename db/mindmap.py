@@ -1,3 +1,6 @@
+import json
+
+from flask import make_response, jsonify
 from flask_login import UserMixin
 
 from db.db import db_cursor
@@ -47,6 +50,31 @@ class Mindmap(UserMixin):
             )
 
         return mindmap
+
+    @staticmethod
+    def getAll(customer_id):
+        with db_cursor() as cur:
+            cur.execute(
+            "SELECT * FROM Mindmap WHERE customer_id = %s", (customer_id,)
+            )
+            rows = cur.fetchall()
+
+            if not rows:
+                return None
+
+            dictionaries = {}
+            for row in rows:
+                dictionary = {}
+                dictionary["id"] = row[0]
+                dictionary["uuid"] = row[1]
+                dictionary["customer_id"] = row[2]
+                dictionary["title"] = row[3]
+                dictionary["description"] = row[4]
+                dictionary["map"] = row[5]
+                dictionaries[dictionary["id"]]=dictionary
+
+            return dictionaries
+
 
     @staticmethod
     def get(customer_id, title):
@@ -107,4 +135,12 @@ class Mindmap(UserMixin):
                 "WHERE customer_id = %s "
                 "AND  uuid = %s",
                 (title, description, customer_id, uuid),
+            )
+
+    @staticmethod
+    def remove(uuid):
+        with db_cursor() as cur:
+            cur.execute(
+                "DELETE FROM mindmap WHERE uuid = %s",
+                (uuid,)
             )

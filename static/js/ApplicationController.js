@@ -106,6 +106,9 @@ mindmaps.ApplicationController = function() {
    * event bus.
    */
   this.init = function() {
+
+
+
     var newDocumentCommand = commandRegistry
         .get(mindmaps.NewDocumentCommand);
     newDocumentCommand.setHandler(doNewDocument);
@@ -162,9 +165,9 @@ mindmaps.ApplicationController = function() {
         mindmapModel, commandRegistry);
     viewController.go();
 
-        documents = mindmaps.LocalDocumentStorage.getDocuments();
-        if (documents.length > 0){
-          var doc = mindmaps.LocalDocumentStorage.getDocuments()[0]
+        docId=mindmaps.LocalDocumentStorage.getMainId()
+        doc=mindmaps.LocalDocumentStorage.loadDocument(docId)
+        if (doc != null) {
           mindmapModel.setDocument(doc)
         }
         else {

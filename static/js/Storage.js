@@ -97,6 +97,18 @@ mindmaps.LocalDocumentStorage = (function() {
         return false;
       }
     },
+    saveDocumentNotSerializable : function(doc) {
+      try {
+        localStorage.setItem(prefix + doc.id, JSON.stringify(doc));
+        return true;
+      } catch (error) {
+        // QUOTA_EXCEEDED
+        console.error("Error while saving document to local storage",
+            error);
+        return false;
+      }
+    },
+
 
     /**
      * Loads a document from the local storage.
@@ -160,7 +172,9 @@ mindmaps.LocalDocumentStorage = (function() {
     deleteDocument : function(doc) {
       localStorage.removeItem(prefix + doc.id);
     },
-
+    deleteDocumentById : function(id) {
+      localStorage.removeItem(prefix + id);
+    },
     clear : function() {
       localStorage.clear();
     },

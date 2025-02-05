@@ -221,6 +221,7 @@ def mindmap_info():
 
 
 @app.route('/mindmap/info', methods=['GET'])
+@login_required
 def get_mindmap_info():
     user_id = None
     if current_user.is_authenticated:
@@ -229,9 +230,37 @@ def get_mindmap_info():
     map_uuid = request.args.get('uuid')
 
     map = Mindmap.getByUUID(uuid=map_uuid)
-    response = {"title": map.title, "description": map.description}
-    return response
+    if map:
+        return {"uuid": map_uuid, "title": map.title, "description": map.description}
 
+    return {"uuid": map_uuid}
+
+@app.route('/mindmap', methods=['GET'])
+@login_required
+def get_mindmaps():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+    maps = Mindmap.getAll(customer_id=user_id)
+    if maps:
+        return maps
+
+    return {}
+
+@app.route('/mindmap/remove', methods=['DELETE'])
+def remove_mindmap():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+    uuid = request.args.get('uuid')
+
+    print("uuid")
+    print(uuid)
+    Mindmap.remove(uuid=uuid)
+
+    return {}, 200
 
 if __name__ == "__main__":
     app.run(ssl_context="adhoc")
