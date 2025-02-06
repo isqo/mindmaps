@@ -1,11 +1,12 @@
 dictionary = {}
 $.ajax({
     type: 'get',
-    url: 'https://127.0.0.1:5000/mindmap',
+    url: 'https://127.0.0.1:5000/mindmaps',
     contentType: "application/json; charset=utf-8",
     success: function (dicts) {
         var renderer = new mindmaps.StaticCanvasRenderer();
         dictionary = dicts;
+        console.log(dicts)
         for (var key in dicts) {
 
             title = dicts[key]["title"]
@@ -44,6 +45,7 @@ function ViewImage(value) {
 }
 
 function editMindmap(value){
+
     uuid=value.attr("uuid")
     $.ajax({
         type: 'post',
@@ -53,12 +55,12 @@ function editMindmap(value){
             map = data["map"]
             json = mindmaps.Document.fromObject(map)
             mindmaps.LocalDocumentStorage.saveDocument(json)
-            switchDoc(value)
+            switchDoc(json.id)
         }
     });
 }
 
-function switchDoc(value) {
-    mindmaps.LocalDocumentStorage.setMainId(value.attr("uuid"));
+function switchDoc(id) {
+    mindmaps.LocalDocumentStorage.setMainId(id);
     document.location.href = '/'
 }

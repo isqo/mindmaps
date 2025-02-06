@@ -1,12 +1,16 @@
+docs = []
 $.ajax({
     type: 'get',
-    url: 'https://127.0.0.1:5000/mindmap',
+    url: 'https://127.0.0.1:5000/mindmaps/mine',
     contentType: "application/json; charset=utf-8",
     success: function (dicts) {
+        mindmaps.LocalDocumentStorage.clear();
+
         for (var dict in dicts) {
+            console.log(dict)
             map = dicts[dict]["map"]
-            json = mindmaps.Document.fromObject(map)
-            mindmaps.LocalDocumentStorage.saveDocument(json)
+            doc = mindmaps.Document.fromObject(map)
+            mindmaps.LocalDocumentStorage.saveDocument(doc)
         }
     },
     error: function (err) {
@@ -15,7 +19,9 @@ $.ajax({
 
 });
 
-docs = mindmaps.LocalDocumentStorage.getDocuments()
+
+
+docs = mindmaps.LocalDocumentStorage.getDocuments();
 
 docs.forEach(function (doc, index) {
     uuid = doc.id
@@ -58,7 +64,7 @@ docs.forEach(function (doc, index) {
 
 function remove(value) {
     $.confirm({
-        title: 'Confirm!', content: 'Simple confirm!', buttons: {
+        title: 'Confirm!', content: 'are you sure you want to delete it ?', buttons: {
             confirm: function () {
                 url = 'https://127.0.0.1:5000/mindmap/remove?uuid=' + value.attr("uuid")
                 $.ajax({

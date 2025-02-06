@@ -65,7 +65,9 @@
       <div id="img-modal" class="modal-body"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        {% if current_user.is_authenticated %}
         <button type="button" class="btn btn-primary" id="edit-mindmap">copy</button>
+        {% endif %}
       </div>
     </div>
   </div>

@@ -51,7 +51,7 @@ class Mindmap(UserMixin):
         return mindmap
 
     @staticmethod
-    def getAll(customer_id):
+    def getAllByCustomer(customer_id):
         with db_cursor() as cur:
             cur.execute(
             "SELECT * FROM Mindmap WHERE customer_id = %s", (customer_id,)
@@ -74,6 +74,29 @@ class Mindmap(UserMixin):
 
             return dictionaries
 
+    @staticmethod
+    def getAll():
+        with db_cursor() as cur:
+            cur.execute(
+                "SELECT * FROM Mindmap ",
+            )
+            rows = cur.fetchall()
+
+            if not rows:
+                return None
+
+            dictionaries = {}
+            for row in rows:
+                dictionary = {}
+                dictionary["id"] = row[0]
+                dictionary["uuid"] = row[1]
+                dictionary["customer_id"] = row[2]
+                dictionary["title"] = row[3]
+                dictionary["description"] = row[4]
+                dictionary["map"] = row[5]
+                dictionaries[dictionary["id"]]=dictionary
+
+            return dictionaries
 
     @staticmethod
     def get(customer_id, title):

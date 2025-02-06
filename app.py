@@ -66,7 +66,6 @@ def index():
 
 
 @app.route("/gallery")
-@login_required
 def gallery():
     return render_template('gallery.html')
 
@@ -199,7 +198,6 @@ def mindmap():
 
 
 @app.route('/mindmap/info', methods=['POST'])
-@login_required
 def mindmap_info():
     user_id = None
     if current_user.is_authenticated:
@@ -222,7 +220,6 @@ def mindmap_info():
 
 
 @app.route('/mindmap/info', methods=['GET'])
-@login_required
 def get_mindmap_info():
     user_id = None
     if current_user.is_authenticated:
@@ -237,19 +234,30 @@ def get_mindmap_info():
     return {"uuid": map_uuid}
 
 
-@app.route('/mindmap', methods=['GET'])
+@app.route('/mindmaps/mine', methods=['GET'])
 @login_required
-def get_mindmaps():
+def get_my_mindmaps():
     user_id = None
     if current_user.is_authenticated:
         user_id = current_user.id
 
-    maps = Mindmap.getAll(customer_id=user_id)
+        print("user_id")
+    print(user_id)
+    maps = Mindmap.getAllByCustomer(customer_id=user_id)
+    print(maps)
     if maps:
         return maps
 
     return {}
 
+@app.route('/mindmaps', methods=['GET'])
+def get_mindmaps():
+
+    maps = Mindmap.getAll()
+    if maps:
+        return maps
+
+    return {}
 
 @app.route('/mindmap/remove', methods=['DELETE'])
 def remove_mindmap():
@@ -265,6 +273,7 @@ def remove_mindmap():
 
 
 @app.route('/mindmap/clone', methods=['POST'])
+@login_required
 def clone_a_node():
     user_id = None
     if current_user.is_authenticated:
