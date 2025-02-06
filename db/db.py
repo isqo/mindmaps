@@ -1,19 +1,14 @@
 # http://flask.pocoo.org/docs/1.0/tutorial/database/
+import os
 from contextlib import contextmanager
 
 import psycopg2.pool
 
-DB_NAME = "treemap"
-DB_USER = "treemap_user"
-DB_PASS = "treemap_password"
-DB_HOST = "localhost"
-DB_PORT = "5432"
-
-dbpool = psycopg2.pool.ThreadedConnectionPool(host=DB_HOST,
-                                              port=DB_PORT,
-                                              dbname=DB_NAME,
-                                              user=DB_USER,
-                                              password=DB_PASS,
+dbpool = psycopg2.pool.ThreadedConnectionPool(host=os.environ.get('DB_HOST', "localhost"),
+                                              port=os.environ.get('DB_PORT', 5432),
+                                              dbname=os.environ.get('DB_NAME', "treemap"),
+                                              user=os.environ.get('DB_USER', "treemap_user"),
+                                              password=os.environ.get('DB_PASSWORD', "treemap_password"),
                                               minconn=10,
                                               maxconn=50
                                               );
