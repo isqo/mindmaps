@@ -1,6 +1,7 @@
 # Python standard libraries
 import json
 import os
+import uuid
 
 import requests
 # Third-party libraries
@@ -235,6 +236,7 @@ def get_mindmap_info():
 
     return {"uuid": map_uuid}
 
+
 @app.route('/mindmap', methods=['GET'])
 @login_required
 def get_mindmaps():
@@ -248,6 +250,7 @@ def get_mindmaps():
 
     return {}
 
+
 @app.route('/mindmap/remove', methods=['DELETE'])
 def remove_mindmap():
     user_id = None
@@ -256,11 +259,30 @@ def remove_mindmap():
 
     uuid = request.args.get('uuid')
 
-    print("uuid")
-    print(uuid)
     Mindmap.remove(uuid=uuid)
 
     return {}, 200
+
+
+@app.route('/mindmap/clone', methods=['POST'])
+def clone_a_node():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+    old_uuid = request.args.get('uuid')
+    new_uuid = uuid.uuid4();
+
+    mindMap = Mindmap.getByUUID(uuid=old_uuid)
+
+    mindMap.map['id'] = str(new_uuid)
+
+    Mindmap.create(map_uuid=str(new_uuid), customer_id=user_id, title=mindMap.title, description=mindMap.description,
+                   map=json.dumps(mindMap.map))
+
+    return {"uuid": new_uuid, "customer_id": user_id, "title": mindMap.title, "description": mindMap.description,
+            "map": mindMap.map}, 200
+
 
 if __name__ == "__main__":
     app.run(ssl_context="adhoc")

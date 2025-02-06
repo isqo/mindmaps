@@ -10,7 +10,7 @@ class Mindmap(UserMixin):
     def __init__(self, id, uuid, customer_id, title, description, map):
         self.id = id,
         self.uuid = uuid
-        customer_id = customer_id
+        self.customer_id = customer_id
         self.title = title
         self.description = description
         self.map = map
@@ -26,7 +26,6 @@ class Mindmap(UserMixin):
             if not mindmap:
                 return None
 
-            print(mindmap[0])
             mindmap = Mindmap(
                 id=mindmap[0], uuid=mindmap[1], customer_id=mindmap[2], title=mindmap[3], description=mindmap[4],
                 map=mindmap[5]

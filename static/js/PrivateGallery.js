@@ -44,7 +44,7 @@ docs.forEach(function (doc, index) {
 
             removeLink = "<button type=\"button\" class=\"btn-close\" aria-label=\"Close\"" + " style=\"float: right; font-size: 10px;\" uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\" ></button>"
 
-            $("#my-gallery").append(" " + targetRemoval + " <div class=\"card h-100\"> " + "<div class=\"card-header\">" + removeLink + "</div>" + "<a uuid=\"" + uuid + "\" onclick=\"return switchDoc($(this));\" id=\"my-img-" + index + "\" href='#'> " + "</a> " + "<div class=\"card-body\" id=\"card-body\">" + " <h5 class=\"card-title\">" + title + "</h5>" + " <div class=\"card-text\">" + description + "</div> </div> </div> </div>")
+            $("#my-gallery").append(" " + targetRemoval + " <div class=\"card h-100\"> " + "<div class=\"card-header\" style=' '>" + removeLink + "</div>" + "<a uuid=\"" + uuid + "\" onclick=\"return switchDoc($(this));\" id=\"my-img-" + index + "\" href='#'> " + "</a> " + "<div class=\"card-body\" id=\"card-body\">" + " <h5 class=\"card-title\">" + title + "</h5>" + " <div class=\"card-text\">" + description + "</div> </div> </div> </div>")
 
 
             $("#my-img-" + index).html($img.css("height", "200px").css("width", "200px"))
