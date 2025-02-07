@@ -18,6 +18,4 @@ COPY entrypoint.sh entrypoint.sh
 RUN python -m pip install -r requirements.txt
 RUN pip install psycopg2-binary
 
-RUN dos2unix entrypoint.sh
-
-ENTRYPOINT ["python", "app.py"]
+CMD ["gunicorn"  , "-b", "0.0.0.0:5000","--timeout","120","--workers","5",	"app:app"]

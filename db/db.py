@@ -4,7 +4,7 @@ from contextlib import contextmanager
 
 import psycopg2.pool
 
-dbpool = psycopg2.pool.ThreadedConnectionPool(host=os.environ.get('DB_HOST', "localhost"),
+dbpool = psycopg2.pool.ThreadedConnectionPool(host=os.environ.get('DB_HOST', "127.0.0.1"),
                                               port=os.environ.get('DB_PORT', 5432),
                                               dbname=os.environ.get('DB_NAME', "treemap"),
                                                   user=os.environ.get('DB_USER', "treemap_user"),

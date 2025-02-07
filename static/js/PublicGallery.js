@@ -1,12 +1,12 @@
 dictionary = {}
 $.ajax({
     type: 'get',
-    url: 'https://127.0.0.1:5000/mindmaps',
+    url: 'http://localhost:5000/mindmaps',
     contentType: "application/json; charset=utf-8",
     success: function (dicts) {
         var renderer = new mindmaps.StaticCanvasRenderer();
         dictionary = dicts;
-        console.log(dicts)
+
         for (var key in dicts) {
 
             title = dicts[key]["title"]
@@ -27,9 +27,13 @@ $.ajax({
 
         }
     },
+    failure: function(fail){
+        console.log("AJAX fail in request: " + JSON.stringify(fail, null, 2));
+    },
     error: function (err) {
         console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-    }
+    },
+    timeout: 300000
 
 });
 
@@ -49,7 +53,7 @@ function editMindmap(value){
     uuid=value.attr("uuid")
     $.ajax({
         type: 'post',
-        url: 'https://127.0.0.1:5000/mindmap/clone?uuid='+uuid,
+        url: 'http://127.0.0.1:5000/mindmap/clone?uuid='+uuid,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             map = data["map"]
