@@ -11,6 +11,6 @@ RUN \
  dos2unix /entrypoint.sh && \
  rm -rf /var/cache/apk/* && \
  mkdir -p /var/www/certbot/.well-known/acme-challenge/ && \
- touch Test_File > /var/www/certbot;
+ touch /var/www/certbot/Test_File;
 
 CMD ["/entrypoint.sh"]
