@@ -15,6 +15,7 @@ from flask_login import (
     logout_user,
 )
 from oauthlib.oauth2 import WebApplicationClient
+from waitress import serve
 
 from db.customer import Customer
 from db.mindmap import Mindmap
@@ -250,14 +251,15 @@ def get_my_mindmaps():
 
     return {}
 
+
 @app.route('/mindmaps', methods=['GET'])
 def get_mindmaps():
-
     maps = Mindmap.getAll()
     if maps:
         return maps
 
     return {}
+
 
 @app.route('/mindmap/remove', methods=['DELETE'])
 def remove_mindmap():
@@ -295,3 +297,4 @@ def clone_a_node():
 
 if __name__ == "__main__":
     app.run(ssl_context="adhoc")
+    #serve(app, host='127.0.0.1', port=5000)

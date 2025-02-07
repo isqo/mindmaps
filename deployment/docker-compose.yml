@@ -11,11 +11,11 @@ services:
       ports:
         - 5432:5432
       volumes:
-        - ~/apps/postgres:/var/lib/postgresql/data
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       environment:
+        - POSTGRES_DB=treemap
         - POSTGRES_PASSWORD=treemap_password
         - POSTGRES_USER=treemap_user
-        - POSTGRES_DB=treemap
 
 volumes:
   app_data:

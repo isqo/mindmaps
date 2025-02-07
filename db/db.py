@@ -7,7 +7,7 @@ import psycopg2.pool
 dbpool = psycopg2.pool.ThreadedConnectionPool(host=os.environ.get('DB_HOST', "localhost"),
                                               port=os.environ.get('DB_PORT', 5432),
                                               dbname=os.environ.get('DB_NAME', "treemap"),
-                                              user=os.environ.get('DB_USER', "treemap_user"),
+                                                  user=os.environ.get('DB_USER', "treemap_user"),
                                               password=os.environ.get('DB_PASSWORD', "treemap_password"),
                                               minconn=10,
                                               maxconn=50
