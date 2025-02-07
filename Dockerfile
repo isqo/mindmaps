@@ -16,6 +16,6 @@ COPY . .
 COPY requirements.txt requirements.txt
 COPY entrypoint.sh entrypoint.sh
 RUN python -m pip install -r requirements.txt
-RUN pip install psycopg2-binary
+    RUN pip install psycopg2-binary
 
-CMD ["gunicorn"  , "-b", "0.0.0.0:5000","--timeout","120","--workers","5",	"app:app"]
+CMD ["gunicorn"  , "-b", "0.0.0.0:80","--timeout","120","--workers","5",	"app:app"]
