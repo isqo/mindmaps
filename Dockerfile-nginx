@@ -10,8 +10,6 @@ RUN \
  chmod +x /entrypoint.sh && \
  dos2unix /entrypoint.sh && \
  rm -rf /var/cache/apk/* && \
- mkdir -p /var/www/certbot/.well-known/acme-challenge/ && \
-     mkdir -p /var/www/certbot/.well-known/acme-challenge/ && \
- touch /var/www/certbot/.well-known/acme-challenge/Test_File;
+ mkdir -p /var/www/certbot
 
 CMD ["/entrypoint.sh"]
