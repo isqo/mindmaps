@@ -9,6 +9,7 @@ RUN \
  chmod +x /entrypoint.sh && \
  dos2unix /entrypoint.sh && \
  rm -rf /var/cache/apk/* && \
+mkdir /var/www/letsencrypt && \
  mkdir -p mkdir -p /var/www/certbot/.well-known/acme-challenge/ && \
     echo "Test_File-1234" > /var/www/certbot/.well-known/acme-challenge/index.html
 
