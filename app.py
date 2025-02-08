@@ -68,7 +68,7 @@ def index():
 
 @app.route("/gallery")
 def gallery():
-    return render_template('gallery.html')
+        return render_template('gallery.html')
 
 
 @app.route("/my-gallery")
@@ -105,7 +105,7 @@ def callback():
     # things on behalf of a user
     google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
-
+    print("test")
     # Prepare and send a request to get tokens! Yay tokens!
     token_url, headers, body = client.prepare_token_request(
         token_endpoint,
