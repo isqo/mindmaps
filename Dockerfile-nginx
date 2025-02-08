@@ -1,7 +1,6 @@
 FROM nginx:1.17.8-alpine
 
 ADD deploy/nginx/http/conf/nginx.conf /etc/nginx/nginx.conf
-ADD deploy/nginx/http/conf/service.conf /etc/nginx/conf.d/service.conf
 
 ADD deploy/nginx/http/script/entrypoint.sh /entrypoint.sh
 
