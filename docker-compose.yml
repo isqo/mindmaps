@@ -17,8 +17,7 @@ services:
     volumes:
       - app_data:/var/www/html/storage/app/public
     env_file: ./.env
-    depends_on:
-      - nginx
+
 
 volumes:
   app_data:
