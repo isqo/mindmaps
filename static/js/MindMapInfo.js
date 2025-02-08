@@ -15,7 +15,7 @@ mindmaps.MindMapInfoView = function () {
             map_uuid=mindmaps.LocalDocumentStorage.getMainId()
             $.ajax({
                 type: 'get',
-                    url: 'http://127.0.0.1:5000/mindmap/info?uuid='+map_uuid,
+                    url: 'https://treemap.services/mindmap/info?uuid='+map_uuid,
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     $('#mindmap-title').val(data.title)
@@ -37,7 +37,7 @@ mindmaps.MindMapInfoView = function () {
                 }
                 $.ajax({
                     type: 'post',
-                    url: 'http://127.0.0.1:5000/mindmap/info?uuid='+map_uuid,
+                    url: 'https://treemap.services/mindmap/info?uuid='+map_uuid,
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                 });

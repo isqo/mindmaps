@@ -1,7 +1,7 @@
 docs = []
 $.ajax({
     type: 'get',
-    url: 'http://127.0.0.1:5000/mindmaps/mine',
+    url: 'https://treemap.services/mindmaps/mine',
     contentType: "application/json; charset=utf-8",
     success: function (dicts) {
         mindmaps.LocalDocumentStorage.clear();
@@ -27,7 +27,7 @@ docs.forEach(function (doc, index) {
     uuid = doc.id
     $.ajax({
         type: 'get',
-        url: 'http://127.0.0.1:5000/mindmap/info?uuid=' + uuid,
+        url: 'https://treemap.services/mindmap/info?uuid=' + uuid,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             var renderer = new mindmaps.StaticCanvasRenderer();
@@ -66,7 +66,7 @@ function remove(value) {
     $.confirm({
         title: 'Confirm!', content: 'are you sure you want to delete it ?', buttons: {
             confirm: function () {
-                url = 'http://127.0.0.1:5000/mindmap/remove?uuid=' + value.attr("uuid")
+                url = 'https://treemap.services/mindmap/remove?uuid=' + value.attr("uuid")
                 $.ajax({
                     type: 'DELETE', url: url, contentType: "application/json; charset=utf-8", success: function (data) {
                         uuid = value.attr("uuid")
