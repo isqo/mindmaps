@@ -161,8 +161,8 @@ def callback():
     # set_refresh_cookies(resp, refresh_token)
 
     # Begin user session by logging the user in
-    login_user(customer)
-
+    value = login_user(customer)
+    print(value)
     # response = make_response(redirect(url_for("index")))
     # response.set_cookie('access_token', access_token)
     # response.set_cookie('refresh_token', refresh_token)
