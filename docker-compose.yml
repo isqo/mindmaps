@@ -13,7 +13,7 @@ services:
     networks:
       - network
     ports:
-      - "5000:5000"
+      - "8000:8000"
     volumes:
       - app_data:/var/www/html/storage/app/public
     env_file: ./.env
