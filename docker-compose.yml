@@ -28,9 +28,11 @@ services:
     restart: always
     container_name: nginx
     volumes:
-      - app_data:/var/www/html/public/storage
-     # - /etc/nginx/ssl/live/ismaelqouiqa.com/privkey.pem:/etc/nginx/ssl/live/ismaelqouiqa.com/privkey.pem
-     # - /etc/nginx/ssl/live/ismaelqouiqa.com/fullchain.pem:/etc/nginx/ssl/live/ismaelqouiqa.com/fullchain.pem
+      - /docker/nginx/conf:/etc/nginx:ro
+      - /docker/nginx/www/:/var/www:ro
+      - /certs/letsencrypt:/etc/letsencrypt:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /var/log:/var/log
     ports:
       - "80:80"
       - "443:443"
