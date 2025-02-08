@@ -5,38 +5,40 @@ networks:
     driver: bridge
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: treemap:latest
-    networks:
-      - network
-    ports:
-      - "5000:5000"
-    volumes:
-      - app_data:/var/www/html/storage/app/public
-    env_file: ./.env
-    depends_on:
-      - nginx
 
   nginx:
     build:
       context: .
       dockerfile: Dockerfile-nginx
+    environment:
+      DOMAIN: "treemap.services"
     image: nginx:latest
     restart: always
     container_name: nginx
     volumes:
-      - app_data:/var/www/html/public/storage
-     # - /etc/nginx/ssl/live/ismaelqouiqa.com/privkey.pem:/etc/nginx/ssl/live/ismaelqouiqa.com/privkey.pem
-     # - /etc/nginx/ssl/live/ismaelqouiqa.com/fullchain.pem:/etc/nginx/ssl/live/ismaelqouiqa.com/fullchain.pem
+      - ./etc/nginx/templates:/etc/nginx/templates:ro
+      - ./etc/letsencrypt:/etc/letsencrypt:ro # mounting the folder to the nginx container
+      - ./certbot/data:/var/www/certbot
     ports:
       - "80:80"
       - "443:443"
     networks:
       - network
-
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:latest
+    environment:
+      DOMAIN: "treemap.services"
+      EMAIL: "qouiqaismael890@gmail.com"
+    depends_on:
+      - nginx
+    command: >-
+      certonly --reinstall --webroot --webroot-path=/var/www/certbot
+      --email ${EMAIL} --agree-tos --no-eff-email
+      -d ${DOMAIN}
+    volumes:
+      - ./etc/letsencrypt:/etc/letsencrypt
+      - ./certbot/data:/var/www/certbot
 volumes:
   app_data:
     driver: local
