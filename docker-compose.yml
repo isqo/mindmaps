@@ -5,30 +5,36 @@ networks:
     driver: bridge
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: treemap:latest
+    networks:
+      - network
+    ports:
+      - "5000:5000"
+    volumes:
+      - app_data:/var/www/html/storage/app/public
+    env_file: ./.env
+    depends_on:
+      - nginx
 
   nginx:
     build:
       context: .
       dockerfile: Dockerfile-nginx
-    environment:
-      DOMAIN: "treemap.services"
     image: nginx:latest
     restart: always
     container_name: nginx
     volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - app_data:/var/www/html/public/storage
     ports:
       - "80:80"
       - "443:443"
     networks:
       - network
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
+
 volumes:
   app_data:
     driver: local
