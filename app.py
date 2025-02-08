@@ -297,4 +297,4 @@ def clone_a_node():
 
 if __name__ == "__main__":
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
-    app.run()
+    app.run(debug=True)
