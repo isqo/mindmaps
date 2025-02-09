@@ -40,12 +40,12 @@ docs.forEach(function (doc, index) {
                 title = "<p uuid=" + uuid + ">" + "not yet saved" + "</p>"
                 description = "<p uuid=" + uuid + " style=\"white-space: nowrap;overflow: hidden;\">Save your project now?</p>"
                 //removeLink = "<a style='float: right; font-size: 15px;' uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\">delete</a>"
-                targetRemoval = "<div card-uuid=\"" + uuid + "\" class=\"col-3\" style=\"margin-bottom: 10px\">"
+                targetRemoval = "<div card-uuid=\"" + uuid + "\" class=\"col-lg-3 col-sm-6\" style=\"margin-bottom: 10px\">"
             } else {
                 title = "<p  uuid=" + uuid + " onclick=\"return switchDoc($(this));\">" + title + "</p>"
                 description = "<p uuid=" + uuid + " style=\"white-space: nowrap;overflow: hidden;\">" + description + "</p>"
                 // removeLink = "<a style='float: right; font-size: 15px;' uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\">delete</a>"
-                targetRemoval = "<div card-uuid=\"" + uuid + "\" class=\"col-3\" style=\"margin-bottom: 10px\">"
+                targetRemoval = "<div card-uuid=\"" + uuid + "\" class=\"col-lg-3 col-sm-6\" style=\"margin-bottom: 10px\">"
             }
 
             removeLink = "<button type=\"button\" class=\"btn-close\" aria-label=\"Close\"" + " style=\"float: right; font-size: 10px;\" uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\" ></button>"
