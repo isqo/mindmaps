@@ -15,9 +15,9 @@ RUN python -m pip install --upgrade pip
 COPY . .
 COPY requirements.txt requirements.txt
 COPY entrypoint.sh entrypoint.sh
+
 RUN python -m pip install -r requirements.txt
     RUN pip install psycopg2-binary
 
-#CMD ["gunicorn"  , "-b", "0.0.0.0:8000","--timeout","120","--workers","5",	"app:app"] \
-
-CMD ["python"  , "app.py"]
+CMD ["gunicorn"  , "--config", "gunicorn_config.py", "app:app"]
+#CMD ["python"  , "app.py"]
