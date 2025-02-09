@@ -13,7 +13,7 @@ mindmaps.MindMapInfoView = function () {
             $(this).remove();
         }, open: function () {
             map_uuid=mindmaps.LocalDocumentStorage.getMainId()
-            url=mindmaps.Util.url("mindmap/info?uuid=+map_uuid"+map_uuid)
+            url=mindmaps.Util.url("mindmap/info?uuid="+map_uuid)
             $.ajax({
                 type: 'get',
                     url: url,
@@ -30,13 +30,13 @@ mindmaps.MindMapInfoView = function () {
             $dialog.dialog("option", "position", "center");
         }, buttons: {
             "Save": function () {
-                map_uuid=mindmaps.LocalDocumentStorage.getMainId()
+                uuid=mindmaps.LocalDocumentStorage.getMainId();
                 title = $('#mindmap-title').val()
                 description = $('#mindmap-description').val()
                 data = {
                     "title": title, "description": description
                 }
-                url=mindmaps.Util.url("mindmap/info?uuid="+map_uuid)
+                url=mindmaps.Util.url("mindmap/info?uuid="+uuid)
                 $.ajax({
                     type: 'post',
                     url: url,
