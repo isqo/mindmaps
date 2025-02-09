@@ -1,6 +1,6 @@
 function logOut() {
   $.ajax({
-    url : 'https://treemap.services/logout',
+    url : 'http://127.0.0.1:5000/logout',
     type : 'GET',
     success : function(data) {
       console.log('Data: '+data);
