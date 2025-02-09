@@ -222,6 +222,7 @@ mindmaps.MindMapModel = function (eventBus, commandRegistry, undoController) {
     this.saveToLocalStorage = function () {
         doc = this.document.prepareSave();
         if (doc != null && doc.mindmap != null && doc.mindmap.nodes != null && doc.mindmap.nodes.count > 5) {
+            console.log(doc.mindmap.nodes.count)
             var success = mindmaps.LocalDocumentStorage.saveDocument(doc);
 
             mindmaps.LocalDocumentStorage.setMainId(doc.id)
