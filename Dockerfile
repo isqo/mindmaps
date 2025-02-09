@@ -18,6 +18,9 @@ COPY entrypoint.sh entrypoint.sh
 RUN python -m pip install -r requirements.txt
     RUN pip install psycopg2-binary
 
-CMD ["gunicorn"  , "-b", "0.0.0.0:8000","--timeout","120","--workers","5",	"app:app"] \
+#CMD ["gunicorn"  , "-b", "0.0.0.0:8000","--timeout","120","--workers","5",	"app:app"] \
 
 #CMD ["python"  , "app.py"]
+
+
+CMD ["waitress-serve", "--call", "app:app"]
