@@ -220,6 +220,7 @@ mindmaps.MindMapModel = function (eventBus, commandRegistry, undoController) {
      * @returns {Boolean} whether the save was successful.
      */
     this.saveToLocalStorage = function () {
+        console.log("saveToLocalStorage")
         doc = this.document.prepareSave();
         if (doc != null && doc.mindmap != null && doc.mindmap.nodes != null && doc.mindmap.nodes.count > 5) {
             console.log(doc.mindmap.nodes.count)
