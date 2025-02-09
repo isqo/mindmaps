@@ -21,6 +21,6 @@ RUN python -m pip install -r requirements.txt
 #CMD ["gunicorn"  , "-b", "0.0.0.0:8000","--timeout","120","--workers","5",	"app:app"] \
 
 #CMD ["python"  , "app.py"]
+#waitress-serve --host 127.0.0.1 --port 5000 app:app
 
-
-CMD ["waitress-serve", "--call", "app:app"]
+CMD ["waitress-serve", "--host", "0.0.0.0", "--port", "8000", "app:app"]
