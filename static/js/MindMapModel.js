@@ -221,21 +221,23 @@ mindmaps.MindMapModel = function (eventBus, commandRegistry, undoController) {
      */
     this.saveToLocalStorage = function () {
         doc = this.document.prepareSave();
-        var success = mindmaps.LocalDocumentStorage.saveDocument(doc);
+        if (doc != null && doc.mindmap != null && doc.mindmap.nodes != null && doc.mindmap.nodes.count > 5) {
+            var success = mindmaps.LocalDocumentStorage.saveDocument(doc);
 
-        mindmaps.LocalDocumentStorage.setMainId(doc.id)
+            mindmaps.LocalDocumentStorage.setMainId(doc.id)
 
-       $.ajax({
-            type: 'post',
-            url: 'https://treemap.services/mindmap?uuid='+doc.id,
-            data: JSON.stringify(doc),
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                console.log(data)
-            }
-        });
+            $.ajax({
+                type: 'post',
+                url: 'https://treemap.services/mindmap?uuid=' + doc.id,
+                data: JSON.stringify(doc),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log(data)
+                }
+            });
 
-        return success;
+            return success;
+        }
     }
 
     this.init();
