@@ -97,25 +97,10 @@ html,body {
   transform: scale(1) rotate(180deg) translate(0px, 0px) skew(0deg, 0deg);
 }
 
-#logoo {
-  float: left;
-  width: 170px;
-  height: 45px;
-  background-color: #AFC8F0;
-  padding-bottom: 40px;
-  color: white;
-  font-size: 2.5em;
-  text-align: center;
-  overflow: hidden;
-  padding-top: 3px;
-  text-shadow: 2px 1px 5px #1C4257;
-}
-
 #logo {
   float: left;
   width: 170px;
   height: 45px;
-  background-color: #AFC8F0;
   padding-bottom: 40px;
   color: white;
   font-size: 2.5em;
