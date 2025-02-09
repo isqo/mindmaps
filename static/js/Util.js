@@ -62,7 +62,7 @@ mindmaps.Util.randomColor = function () {
 };
 
 mindmaps.Util.url = function (path) {
-    return 'http://127.0.0.1:5000/' + path;
+    return 'https://treemap.services/' + path;
 }
 
 mindmaps.Util.getUrlParams = function () {
