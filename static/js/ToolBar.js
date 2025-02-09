@@ -155,10 +155,10 @@ mindmaps.ToolBarButton.prototype.asJquery = function () {
             label: this.getTitle(),
             disabled: !this.isEnabled()
         }).removeClass()
-            .addClass("btn")
-            .css("margin-left", "10px")
-            .css("background-color", '#00740C')
-            .css("color", "white")
+                .addClass("btn")
+                .css("margin-left", "10px")
+                .css("background-color", '#00740C')
+                .css("color", "white")
     ;
 
     /*  var icon = this.command.icon;
@@ -268,6 +268,10 @@ mindmaps.ToolBarPresenter = function (eventBus, commandRegistry, view,
         return commands.map(commandToButton);
     }
 
+
+    view.addButton(commandToButton(mindmaps.myGallery), view.alignRight);
+    view.addButton(commandToButton(mindmaps.mindMapInfo), view.alignRight);
+
     // node buttons
     var nodeCommands = [
         mindmaps.CreateNodeCommand, mindmaps.DeleteNodeCommand, mindmaps.UndoCommand, mindmaps.RedoCommand, mindmaps.CopyNodeCommand,
@@ -286,9 +290,6 @@ mindmaps.ToolBarPresenter = function (eventBus, commandRegistry, view,
     view.addMenu(fileMenu);
 
     view.addButton(commandToButton(mindmaps.LogOut), view.alignRight);
-
-    view.addButton(commandToButton(mindmaps.mindMapInfo), view.alignLeft);
-    view.addButton(commandToButton(mindmaps.myGallery), view.alignLeft);
 
     // only show banner on drichard.org
     $('#container').append(

@@ -278,7 +278,7 @@ mindmaps.mindMapInfo.prototype = new mindmaps.Command();
 
 mindmaps.myGallery = function() {
   this.id = "MYGALLERY";
-  this.label = "Gallery";
+  this.label = "Your Gallery";
   this.description = "Gallery";
   this.enabled = true;
 };
