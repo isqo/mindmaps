@@ -13,9 +13,10 @@ mindmaps.MindMapInfoView = function () {
             $(this).remove();
         }, open: function () {
             map_uuid=mindmaps.LocalDocumentStorage.getMainId()
+            url=mindmaps.Util.url("mindmap/info?uuid=+map_uuid"+map_uuid)
             $.ajax({
                 type: 'get',
-                    url: 'https://treemap.services/mindmap/info?uuid='+map_uuid,
+                    url: url,
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     $('#mindmap-title').val(data.title)
@@ -35,9 +36,10 @@ mindmaps.MindMapInfoView = function () {
                 data = {
                     "title": title, "description": description
                 }
+                url=mindmaps.Util.url("mindmap/info?uuid="+map_uuid)
                 $.ajax({
                     type: 'post',
-                    url: 'https://treemap.services/mindmap/info?uuid='+map_uuid,
+                    url: url,
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                 });

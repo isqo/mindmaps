@@ -1,7 +1,8 @@
 dictionary = {}
+url = mindmaps.Util.url("mindmaps")
 $.ajax({
     type: 'get',
-    url: 'https://treemap.services/mindmaps',
+    url: url,
     contentType: "application/json; charset=utf-8",
     success: function (dicts) {
         var renderer = new mindmaps.StaticCanvasRenderer();
@@ -49,12 +50,12 @@ function ViewImage(value) {
 }
 
 function editMindmap(value){
-
     uuid=value.attr("uuid")
+    url = mindmaps.Util.url("mindmap/clone?uuid="+uuid)
     $.ajax({
         type: 'post',
-        url: 'https://treemap.services/mindmap/clone?uuid='+uuid,
-        contentType: "application/json; charset=utf-8",
+        url: url,
+        contentType: "application/js    on; charset=utf-8",
         success: function (data) {
             map = data["map"]
             json = mindmaps.Document.fromObject(map)

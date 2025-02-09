@@ -1,7 +1,8 @@
 docs = []
+url = mindmaps.Util.url("mindmaps/mine")
 $.ajax({
     type: 'get',
-    url: 'https://treemap.services/mindmaps/mine',
+    url: url,
     contentType: "application/json; charset=utf-8",
     success: function (dicts) {
         mindmaps.LocalDocumentStorage.clear();
@@ -20,14 +21,13 @@ $.ajax({
 });
 
 
-
 docs = mindmaps.LocalDocumentStorage.getDocuments();
-
 docs.forEach(function (doc, index) {
     uuid = doc.id
+    url2 = mindmaps.Util.url("mindmap/info?uuid=" + uuid)
     $.ajax({
         type: 'get',
-        url: 'https://treemap.services/mindmap/info?uuid=' + uuid,
+        url: url2,
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             var renderer = new mindmaps.StaticCanvasRenderer();
@@ -66,9 +66,9 @@ function remove(value) {
     $.confirm({
         title: 'Confirm!', content: 'are you sure you want to delete it ?', buttons: {
             confirm: function () {
-                url = 'https://treemap.services/mindmap/remove?uuid=' + value.attr("uuid")
+                url3 = mindmaps.Util.url("mindmap/remove?uuid=" + value.attr("uuid"))
                 $.ajax({
-                    type: 'DELETE', url: url, contentType: "application/json; charset=utf-8", success: function (data) {
+                    type: 'DELETE', url: url3, contentType: "application/json; charset=utf-8", success: function (data) {
                         uuid = value.attr("uuid")
                         $("[card-uuid=" + uuid + "]").remove()
                         mindmaps.LocalDocumentStorage.deleteDocumentById(uuid)

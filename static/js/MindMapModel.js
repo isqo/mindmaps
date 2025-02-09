@@ -226,10 +226,10 @@ mindmaps.MindMapModel = function (eventBus, commandRegistry, undoController) {
             var success = mindmaps.LocalDocumentStorage.saveDocument(doc);
 
             mindmaps.LocalDocumentStorage.setMainId(doc.id)
-
+            url=mindmaps.Util.url("mindmap?uuid="+ doc.id)
             $.ajax({
                 type: 'post',
-                url: 'https://treemap.services/mindmap?uuid=' + doc.id,
+                url: url,
                 data: JSON.stringify(doc),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {

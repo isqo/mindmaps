@@ -1,6 +1,8 @@
 function logOut() {
+
+  url=mindmaps.Util.url("logout")
   $.ajax({
-    url : 'https://treemap.services/logout',
+    url : url,
     type : 'GET',
     success : function(data) {
       console.log('Data: '+data);
