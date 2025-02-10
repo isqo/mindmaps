@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <link rel="icon" href="{{ url_for('static',filename='img/logo.png') }}" type="image/x-icon" />
+    <title>Treemap</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/app.css') }}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -46,13 +47,13 @@
     <div class="clearfix">
 
       <div class="row">
-        <div class="col" style="margin-top: 50px;"><p><h1 style="color:#14a800">Lightweight mindmaps for people that love simplicity.</h1></p>
+        <div class="col" style="margin-top: 50px;"><p><h1 style="color:#14a800">Lightweight mindmaps for people who love simplicity.</h1></p>
       <div class="col" style="margin-left: -100px;"><img src="{{ url_for('static',filename='img/img1.png') }}" class="img-fluid" alt="..."></div>
       </div>
     </div>
 
 <p style="font-size: 13px;">
-  With simplicity, we aim to bring energy efficiency into the industry, so that we contribute to the climate crisis challenges everyone faces.
+  With simplicity, we aim to bring an easy-to-use application, easy to leverage its potential in many different ways.
 </p>
 
 
@@ -62,9 +63,8 @@
           <div class="card-body">
             <h5 class="card-title" style="color: #14a800">Simplicity</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">easy to onboard</h6>
-            <p class="card-text">It is easy to jump on Treemap for the first time.
-              Most of the time, Mindmaps are lightweight and don't require 1000 branches, even though
-              our solution supports many branches at different levels.
+            <p class="card-text">It is easy to use Treemap, nothing cumbersome.
+              Most of the time, Mindmaps are lightweight and don't require 1000 branches.
             </p>
           </div>
         </div>
@@ -75,26 +75,12 @@
             <h5 class="card-title" style="color: #14a800">Security</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">Security first</h6>
             <p class="card-text">
-              For private lightweight mindmap we make sure that they are stored securely in the Cloud.
-              Any private data will face the same sort of strategy.
-              Security first.
+              Your data are stored securely in the cloud.
+              Private mindmap will face the same sort of strategy, Security first.
             </p>
           </div>
         </div>
       </div>
-        <div class="col-md-2">
-          <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title" style="color: #14a800">Security</h5>
-              <h6 class="card-subtitle mb-2 text-body-secondary">Security first</h6>
-              <p class="card-text">
-                For private lightweight mindmap we make sure that they are stored securely in the Cloud.
-                Any private data will face the same sort of strategy.
-                Security first.
-              </p>
-            </div>
-          </div>
-        </div>
     </div>
 <div class="row">
 <div class="col" style="margin-top: 100px;">
@@ -105,9 +91,8 @@
       <div class="row">
       <div class="card mb-2" style="margin-top: 100px;">
         <div class="card-body">
-          <h5 class="card-title" style="color: #14a800">Green computed solution</h5>
-          <p class="card-text">Our software is energy efficient,
-            which means we optimize our energy consumption to the maximum and we produce the least.</p>
+          <h5 class="card-title" style="color: #14a800">Lightweight multi-level Mindmaps</h5>
+          <p class="card-text"> Our <Mind></Mind>maps are lightweight and support easily a multi-level of branches and leaves </p>
           <p class="card-text"><small class="text-body-secondary"></small></p>
         </div>
       </div>
@@ -119,9 +104,8 @@
       <div class="row">
         <div class="card mb-2" style="margin-top: 100px;">
           <div class="card-body">
-            <h5 class="card-title" style="color: #14a800">Green computed solution</h5>
-            <p class="card-text">Our software is energy efficient,
-              which means we optimize our energy consumption to the maximum and we produce the least.</p>
+            <h5 class="card-title" style="color: #14a800">A solution that respects the environment</h5>
+            <p class="card-text">Our software is energy efficient, and we contribute to the nourishment of Nature by planting trees regularly, Help us!</p>
             <p class="card-text"><small class="text-body-secondary"></small></p>
           </div>
         </div>
@@ -135,37 +119,16 @@
           <img src="{{ url_for('static',filename='img/img1.png') }}"  class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title">Free</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p class="card-text">Free for people who love creating Mindmaps and share it with others .</p>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">You can create an unlimited number of mindmaps</li>
-            <li class="list-group-item">A second item</li>
-            <li class="list-group-item">A third item</li>
+            <li class="list-group-item">Unlimited public diagrams</li>
+            <li class="list-group-item">Auto-Save in the cloud</li>
+            <li class="list-group-item">Save on your computer</li>
+            <li class="list-group-item">Export to png</li>
+            <li class="list-group-item">Export to Json</li>
+            <li class="list-group-item">Print</li>
           </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-
-        </div>
-
-      </div>
-      <div class="col-md-2">
-        <div class="card" style="width: 18rem;">
-          <img src="{{ url_for('static',filename='img/img1.png') }}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Free</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">You can create an unlimited number of mindmaps</li>
-            <li class="list-group-item">You can create an unlimited number of private minmaps</li>
-            <li class="list-group-item">A third item</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
         </div>
       </div>
 
@@ -173,17 +136,20 @@
           <div class="card" style="width: 18rem;">
             <img src= "{{ url_for('static',filename='img/img1.png') }}" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title">Free</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <h5 class="card-title">Premium</h5>
+              <p class="card-text">Premium for people who love the product and want to contribute in privacy.</p>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">You can create an unlimited number of mindmaps</li>
-              <li class="list-group-item">You can create an unlimited number of private minmaps</li>
-              <li class="list-group-item">A third item</li>
+              <li class="list-group-item">Unlimited private diagrams</li>
+              <li class="list-group-item">Unlimited public diagrams</li>
+              <li class="list-group-item">Auto-Save in the cloud</li>
+              <li class="list-group-item">Save on your computer</li>
+              <li class="list-group-item">Export to png</li>
+              <li class="list-group-item">Export to Json</li>
+              <li class="list-group-item">Print</li>
             </ul>
             <div class="card-body">
-              <a href="#" class="card-link">Card link</a>
-              <a href="#" class="card-link">Another link</a>
+              <a href="#" class="card-link">Upgrade</a>
             </div>
           </div>
         </div>
