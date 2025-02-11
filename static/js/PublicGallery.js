@@ -65,9 +65,6 @@ function editMindmap(value) {
             map = data["map"]
             doc = mindmaps.Document.fromObject(map)
             mindmaps.LocalDocumentStorage.saveDocument(doc)
-            console.log("clone")
-            console.log(doc.id)
-
             switchDoc(doc.id)
         }
     });
