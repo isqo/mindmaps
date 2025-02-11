@@ -1,6 +1,3 @@
-import json
-
-from flask import make_response, jsonify
 from flask_login import UserMixin
 
 from db.db import db_cursor
@@ -51,10 +48,10 @@ class Mindmap(UserMixin):
         return mindmap
 
     @staticmethod
-    def getAllByCustomer(customer_id):
+    def getAllByCustomer(customer_id, private):
         with db_cursor() as cur:
             cur.execute(
-            "SELECT * FROM Mindmap WHERE customer_id = %s", (customer_id,)
+                "SELECT * FROM mindmap WHERE customer_id = %s and private =  %s;", (customer_id, private,)
             )
             rows = cur.fetchall()
 
@@ -70,7 +67,7 @@ class Mindmap(UserMixin):
                 dictionary["title"] = row[3]
                 dictionary["description"] = row[4]
                 dictionary["map"] = row[5]
-                dictionaries[dictionary["id"]]=dictionary
+                dictionaries[dictionary["id"]] = dictionary
 
             return dictionaries
 
@@ -78,7 +75,7 @@ class Mindmap(UserMixin):
     def getAll():
         with db_cursor() as cur:
             cur.execute(
-                "SELECT * FROM Mindmap ",
+                "SELECT * FROM Mindmap WHERE private = false",
             )
             rows = cur.fetchall()
 
@@ -94,7 +91,7 @@ class Mindmap(UserMixin):
                 dictionary["title"] = row[3]
                 dictionary["description"] = row[4]
                 dictionary["map"] = row[5]
-                dictionaries[dictionary["id"]]=dictionary
+                dictionaries[dictionary["id"]] = dictionary
 
             return dictionaries
 
@@ -165,4 +162,39 @@ class Mindmap(UserMixin):
             cur.execute(
                 "DELETE FROM mindmap WHERE uuid = %s",
                 (uuid,)
+            )
+
+    @classmethod
+    def getAllPrivate(cls, customer_id):
+        with db_cursor() as cur:
+
+            cur.execute(
+                "SELECT * FROM mindmap WHERE customer_id = %s and private =  true;", (customer_id,)
+            )
+            rows = cur.fetchall()
+
+            if not rows:
+                return None
+
+            dictionaries = {}
+            for row in rows:
+                dictionary = {}
+                dictionary["id"] = row[0]
+                dictionary["uuid"] = row[1]
+                dictionary["customer_id"] = row[2]
+                dictionary["title"] = row[3]
+                dictionary["description"] = row[4]
+                dictionary["map"] = row[5]
+                dictionaries[dictionary["id"]] = dictionary
+
+            return dictionaries
+
+    @classmethod
+    def setItPrivate(cls, uuid):
+        with db_cursor() as cur:
+            cur.execute(
+                "UPDATE mindmap "
+                "SET     private = true "
+                "WHERE uuid = %s ",
+                (uuid,),
             )

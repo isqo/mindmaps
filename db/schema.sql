@@ -18,3 +18,14 @@ CREATE TABLE Mindmap
     map               JSONB,
     created_timestamp timestamp    not null default current_timestamp
 );
+
+ALTER TABLE Mindmap
+    ADD private BOOLEAN NOT NULL DEFAULT FALSE;
+
+CREATE TABLE StripeCustomer
+(
+    id                SERIAL PRIMARY KEY,
+    user_id           integer REFERENCES customer (id),
+    stripeCustomerId       VARCHAR(255) 		NOT NULL,
+    stripeSubscriptionId             VARCHAR(255) NOT NULL
+);

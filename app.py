@@ -4,8 +4,9 @@ import os
 import uuid
 
 import requests
+import stripe
 # Third-party libraries
-from flask import Flask, redirect, request, url_for, g, render_template
+from flask import Flask, redirect, request, url_for, g, render_template, jsonify
 from flask_jwt_extended import JWTManager
 from flask_login import (
     LoginManager,
@@ -15,7 +16,6 @@ from flask_login import (
     logout_user,
 )
 from oauthlib.oauth2 import WebApplicationClient
-from waitress import serve
 
 from db.customer import Customer
 from db.mindmap import Mindmap
@@ -29,6 +29,17 @@ GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
+
+# Stripe
+
+stripe_keys = {
+    "secret_key": os.environ["STRIPE_SECRET_KEY"],
+    "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
+    "price_id": os.environ["STRIPE_PRICE_ID"],  # new
+    "endpoint_secret": os.environ["STRIPE_ENDPOINT_SECRET"],  # new
+}
+
+stripe.api_key = stripe_keys["secret_key"]
 
 # Flask app setup
 app = Flask(__name__, static_url_path='/')
@@ -58,6 +69,84 @@ def load_user(user_id):
     return Customer.get(user_id)
 
 
+@app.route("/config")
+def get_publishable_key():
+    stripe_config = {"publicKey": stripe_keys["publishable_key"]}
+    return jsonify(stripe_config)
+
+
+@app.route("/success")
+def success():
+    return render_template("success.html")
+
+
+@app.route("/cancel")
+def cancelled():
+    return render_template("cancel.html")
+
+
+@app.route("/webhook", methods=["POST"])
+def stripe_webhook():
+    payload = request.get_data(as_text=True)
+    sig_header = request.headers.get("Stripe-Signature")
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, stripe_keys["endpoint_secret"]
+        )
+
+    except ValueError as e:
+        # Invalid payload
+        return "Invalid payload", 400
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return "Invalid signature", 400
+
+    # Handle the checkout.session.completed event
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+
+        # Fulfill the purchase...
+        handle_checkout_session(session)
+
+    return "Success", 200
+
+
+def handle_checkout_session(session):
+    # here you should fetch the details from the session and save the relevant information
+    # to the database (e.g. associate the user with their subscription)
+    print("Subscription was successful.")
+
+
+@app.route("/create-checkout-session")
+def create_checkout_session():
+    domain_url = "http://localhost:5000/"
+    stripe.api_key = stripe_keys["secret_key"]
+
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            # you should get the user id here and pass it along as 'client_reference_id'
+            #
+            # this will allow you to associate the Stripe session with
+            # the user saved in your database
+            #
+            # example: client_reference_id=user.id,
+            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=domain_url + "cancel",
+            payment_method_types=["card"],
+            mode="subscription",
+            line_items=[
+                {
+                    "price": stripe_keys["price_id"],
+                    "quantity": 1,
+                }
+            ]
+        )
+        return jsonify({"sessionId": checkout_session["id"]})
+    except Exception as e:
+        return jsonify(error=str(e)), 403
+
+
 @app.route("/")
 def index():
     if current_user.is_authenticated:
@@ -68,13 +157,19 @@ def index():
 
 @app.route("/gallery")
 def gallery():
-        return render_template('gallery.html')
+    return render_template('gallery.html')
 
 
 @app.route("/my-gallery")
 @login_required
 def myGallery():
     return render_template('mygallery.html')
+
+
+@app.route("/my-private")
+@login_required
+def myPrivate():
+    return render_template('myprivate.html')
 
 
 def get_google_provider_cfg():
@@ -242,10 +337,10 @@ def get_my_mindmaps():
     if current_user.is_authenticated:
         user_id = current_user.id
 
-        print("user_id")
-    print(user_id)
-    maps = Mindmap.getAllByCustomer(customer_id=user_id)
-    print(maps)
+    private = request.args.get('private')
+
+    maps = Mindmap.getAllByCustomer(customer_id=user_id, private=private)
+    print(len(maps))
     if maps:
         return maps
 
@@ -261,7 +356,24 @@ def get_mindmaps():
     return {}
 
 
+@app.route('/mindmaps/private', methods=['GET'])
+@login_required
+def get_mindmaps_private():
+
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+
+    maps = Mindmap.getAllPrivate(user_id)
+    if maps:
+        return maps
+
+    return {}
+
+
 @app.route('/mindmap/remove', methods=['DELETE'])
+@login_required
 def remove_mindmap():
     user_id = None
     if current_user.is_authenticated:
@@ -293,6 +405,20 @@ def clone_a_node():
 
     return {"uuid": new_uuid, "customer_id": user_id, "title": mindMap.title, "description": mindMap.description,
             "map": mindMap.map}, 200
+
+
+@app.route('/mindmap/private', methods=['POST'])
+@login_required
+def make_it_private():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+    uuid = request.args.get('uuid')
+
+    Mindmap.setItPrivate(uuid=uuid)
+
+    return "succeeded!", 200
 
 
 if __name__ == "__main__":

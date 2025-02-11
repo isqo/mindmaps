@@ -130,6 +130,23 @@ mindmaps.LocalDocumentStorage = (function() {
       return documents;
     },
 
+
+    getPublicDocuments : function() {
+      var documents = [];
+      // search localstorage for saved documents
+      for ( var i = 0, max = localStorage.length; i < max; i++) {
+        var key = localStorage.key(i);
+        // value is a document if key confirms to prefix
+        if (key.indexOf(prefix) == 0) {
+          var doc = getDocumentByKey(key);
+          if (doc && doc.private !== true) {
+            documents.push(doc);
+          }
+        }
+      }
+      return documents;
+    },
+
     /**
      * Gets all document ids found in the local storage object.
      *

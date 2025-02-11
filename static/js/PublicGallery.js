@@ -7,17 +7,21 @@ $.ajax({
     success: function (dicts) {
         var renderer = new mindmaps.StaticCanvasRenderer();
         dictionary = dicts;
-
+        console.log(dicts)
         for (var key in dicts) {
 
             title = dicts[key]["title"]
             description = dicts[key]["description"]
             doc = mindmaps.Document.fromObject(dicts[key]["map"])
-            uuid = dicts[key]["uuid"]
             var $img = renderer.renderAsPNG(doc);
+            uuid = dicts[key]["uuid"]
 
-            card = " <div class=\"col-lg-3 col-sm-6\" style=\"margin-bottom: 10px\"> " + "<div class=\"card h-100\"> "
-                + "<a data-bs-toggle=\"modal\" data-bs-target=\"#staticBackdrop\" href=\"#\" uuid=\"" + uuid + "\" key=\"" + key + "\" id=\"img-" + key + "\" onclick=\"ViewImage($(this));return false;\"><img class=\"card-img-top\" alt=\"...\"></a>" +
+            card = " <div class=\"col-lg-3 col-sm-6\" style=\"margin-bottom: 10px\"> " +
+                "<div class=\"card h-100\"> "
+                + "<a data-bs-toggle=\"modal\" data-bs-target=\"#staticBackdrop\"" +
+                " href=\"#\" uuid=\"" + uuid + "\" key=\"" + key + "\" id=\"img-" + key + "\" " +
+                "onclick=\"ViewImage($(this));return false;\">" +
+                "<img class=\"card-img-top\" alt=\"...\"></a>" +
                 " <div class=\"card-body\"> "
                 + "<h5 class=\"card-title\">" + title +
                 "</h5> <p class=\"card-text\" style=\"white-space: nowrap;overflow: hidden;\">" + description + "</p> " +
@@ -28,7 +32,7 @@ $.ajax({
 
         }
     },
-    failure: function(fail){
+    failure: function (fail) {
         console.log("AJAX fail in request: " + JSON.stringify(fail, null, 2));
     },
     error: function (err) {
@@ -49,18 +53,22 @@ function ViewImage(value) {
     $("#edit-mindmap").attr("onclick", "editMindmap($(this));return false;")
 }
 
-function editMindmap(value){
-    uuid=value.attr("uuid")
-    url = mindmaps.Util.url("mindmap/clone?uuid="+uuid)
+
+function editMindmap(value) {
+    uuid = value.attr("uuid")
+    url = mindmaps.Util.url("mindmap/clone?uuid=" + uuid)
     $.ajax({
         type: 'post',
         url: url,
         contentType: "application/js    on; charset=utf-8",
         success: function (data) {
             map = data["map"]
-            json = mindmaps.Document.fromObject(map)
-            mindmaps.LocalDocumentStorage.saveDocument(json)
-            switchDoc(json.id)
+            doc = mindmaps.Document.fromObject(map)
+            mindmaps.LocalDocumentStorage.saveDocument(doc)
+            console.log("clone")
+            console.log(doc.id)
+
+            switchDoc(doc.id)
         }
     });
 }

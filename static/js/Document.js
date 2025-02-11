@@ -5,6 +5,7 @@
  */
 mindmaps.Document = function() {
   this.id = mindmaps.Util.createUUID();
+  this.private = false
   this.title = "New Document";
   this.mindmap = new mindmaps.MindMap();
   this.dates = {
@@ -46,6 +47,7 @@ mindmaps.Document.fromObject = function(obj) {
 
   doc.dimensions = mindmaps.Point.fromObject(obj.dimensions);
   doc.autosave = obj.autosave;
+  doc.private = obj.private;
 
   return doc;
 };
@@ -71,7 +73,8 @@ mindmaps.Document.prototype.toJSON = function() {
     mindmap : this.mindmap,
     dates : dates,
     dimensions : this.dimensions,
-    autosave: this.autosave
+    autosave: this.autosave,
+    private: this.private
   };
 };
 
@@ -152,6 +155,13 @@ mindmaps.Document.prototype.isAutoSave = function() {
   return this.autosave;
 }
 
+mindmaps.Document.prototype.private = function() {
+  return this.private;
+}
+
+mindmaps.Document.prototype.setPrivate= function(private) {
+  this.private = private;
+}
 
 /**
  * Sets autosave setting.
