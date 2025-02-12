@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
     <script id="template-float-panel" type="text/x-jquery-tmpl">
         <div class="ui-widget ui-dialog ui-corner-all ui-widget-content float-panel no-select">
           <div class="ui-dialog-titlebar ui-widget-header-updated ui-helper-clearfix">
@@ -56,17 +57,26 @@
     </script>
     <script id="template-new" type="text/x-jquery-tmpl">
         <div id="new-dialog" class="file-dialog" title="New mind map">
-          <h1>To file</h1>
-          <p>Do you want to save it before creating a new one?.</p>
-          <button id="button-new-cancel">no</button>
-          <button id="button-new-confirm">yes</button>
+          <h1>To the Cloud</h1>
+          <p>Do you want to save it in the cloud before creating a new one?.</p>
+          <button id="button-new-cancel" style="float: right;">no</button>
+          <button id="button-new-confirm" style="float: right;" >yes</button>
         </div>
     </script>
     <script id="template-save" type="text/x-jquery-tmpl">
         <div id="save-dialog" class="file-dialog" title="Save mind map">
           <h1>To file</h1>
           <p>Save the mind map as a file on your computer.</p>
-          <button id="button-save-hdd">Save</button>
+          <button id="button-save-hdd" style="float: right;">Download</button>
+        </div>
+    </script>
+
+    <script id="template-save-cloud" type="text/x-jquery-tmpl">
+
+        <div id="save-cloud-dialog" class="file-dialog" title="Save mind map">
+          <h1>To the Cloud</h1>
+          <p>Save the mind map to the Cloud.</p>
+          <button id="button-save-cloud" style="float: right;">Save</button>
         </div>
     </script>
 
@@ -275,6 +285,7 @@
 <script src="js/ExportMap.js"></script>
 <script src="js/AutoSaveController.js"></script>
 <script src="js/FilePicker.js"></script>
+<script src="js/SaveRemotelyDocument.js"></script>
 <!-- JS:LIB:END -->
 </body>
 </html>

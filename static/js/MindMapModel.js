@@ -219,7 +219,7 @@ mindmaps.MindMapModel = function (eventBus, commandRegistry, undoController) {
      *
      * @returns {Boolean} whether the save was successful.
      */
-    this.saveToLocalStorage = function () {
+    this.saveToLocalStorageAndCloud = function () {
         doc = this.document.prepareSave();
         if (doc != null && doc.mindmap != null && doc.mindmap.nodes != null && doc.mindmap.nodes.count > 2) {
             console.log(doc.mindmap.nodes.count)
@@ -239,6 +239,25 @@ mindmaps.MindMapModel = function (eventBus, commandRegistry, undoController) {
 
             return success;
         }
+    }
+
+    this.saveToLocalStorageAndCloudNoLimits = function () {
+
+        doc = this.document.prepareSave();
+        var success = mindmaps.LocalDocumentStorage.saveDocument(doc);
+        url=mindmaps.Util.url("mindmap?uuid="+ doc.id)
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: JSON.stringify(doc),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data)
+                success =  true;
+            }
+        });
+
+        return success;
     }
 
     this.init();

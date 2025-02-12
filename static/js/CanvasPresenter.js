@@ -273,7 +273,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       // TODO maybe only redraw if height has changed
       view.redrawNodeConnectors(node);
 
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
 
     });
 
@@ -324,12 +324,12 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     eventBus.subscribe(mindmaps.Event.NODE_SELECTED, selectNode);
     eventBus.subscribe(mindmaps.Event.NODE_OPENED, function(node) {
       view.openNode(node);
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_CLOSED, function(node) {
       view.closeNode(node);
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_FONT_CHANGED, function(node) {
@@ -356,40 +356,40 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_CREATED, function(node){
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
     eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node){
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_BRANCH_COLOR_CHANGE, function(node, color) {
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_FONT_CHANGED, function(node) {
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_SELECTED, function(node) {
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
     eventBus.subscribe(mindmaps.Event.NODE_OPENED, function(node) {
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_CLOSED, function(node) {
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_SELECTED, function(node) {
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_DESELECTED, function(node) {
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
     eventBus.subscribe(mindmaps.Event.NODE_MOVED, function(node) {
-      mindmapModel.saveToLocalStorage();
+      mindmapModel.saveToLocalStorageAndCloud();
     });
 
   }

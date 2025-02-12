@@ -44,8 +44,7 @@ mindmaps.NewDocumentView = function () {
 mindmaps.NewDocumentPresenter = function (eventBus, mindmapModel, view) {
 
     $("#button-new-confirm").button().click(function () {
-        //mindmaps.LocalDocumentStorage.clear();
-       alert("save in progress...")
+        mindmapModel.saveToLocalStorageAndCloudNoLimits();
         var doc = new mindmaps.Document();
         mindmapModel.setDocument(doc);
         view.hideOpenDialog();

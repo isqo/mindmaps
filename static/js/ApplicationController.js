@@ -36,7 +36,7 @@ mindmaps.ApplicationController = function() {
   /**
    * Handles the new document command.
    */
-  function doNewDocument() {
+    function doNewDocument() {
     // close old document first
     //var doc = mindmapModel.getDocument();
     //mindmaps.LocalDocumentStorage.clear();
@@ -64,6 +64,13 @@ mindmaps.ApplicationController = function() {
   function doSaveDocument() {
     var presenter = new mindmaps.SaveDocumentPresenter(eventBus,
         mindmapModel, new mindmaps.SaveDocumentView(), autosaveController, filePicker);
+    presenter.go();
+  }
+
+  function doSaveRemotelyDocument() {
+    var presenter = new mindmaps.SaveRemotelyDocumentPresenter(eventBus,
+        mindmapModel, new mindmaps.SaveRemotelyDocumentView(), autosaveController, filePicker);
+
     presenter.go();
   }
 
@@ -120,6 +127,9 @@ mindmaps.ApplicationController = function() {
         .get(mindmaps.OpenDocumentCommand);
     openDocumentCommand.setHandler(doOpenDocument);
     openDocumentCommand.setEnabled(true);
+
+    var SaveRemotelyDocumentCommand = commandRegistry.get(mindmaps.SaveRemotelyDocumentCommand);
+    SaveRemotelyDocumentCommand.setHandler(doSaveRemotelyDocument);
 
     var saveDocumentCommand = commandRegistry
         .get(mindmaps.SaveDocumentCommand);
