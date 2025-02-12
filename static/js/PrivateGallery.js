@@ -10,6 +10,7 @@ $.ajax({
         }
 
         console.log(dicts)
+        dictionary=dicts;
 
         for (var dict in dicts) {
             data = dicts[dict]
@@ -38,9 +39,10 @@ $.ajax({
             }
             removeLink = "<button type=\"button\" class=\"btn-close\" aria-label=\"Close\"" + " style=\"float: right; font-size: 10px;\" uuid=" + uuid + " href=\"#\" onClick=\"remove('" + uuid + "');\" ></button>"
             lock_link = "<a href=\"#\" uuid=" + uuid + " style='float: left; margin-right:10px;  margin-bottom: 0px; color: #14a800'><i class=\"fa fa-lock fa-2x\" aria-hidden=\"true\"></i></a>"
+            editLink =  "<a  href=\"#\" uuid=" + uuid + " style='float: left; margin-right:10px;  margin-bottom: -2x    xpx; color: #14a800' onclick=\"return switchDoc($(this));\"><i class=\"fa fa-edit fa-2x\" aria-hidden=\"true\"></i></a>"
 
-            $("#my-gallery-2").append(" " + targetRemoval + " <div class=\"card h-100\"> " + "<div class=\"card-header\" style=''>" + removeLink + lock_link + "</div>"
-                + "<a uuid=\"" + uuid + "\" onclick=\"return switchDoc('" + uuid + "');\" id=\"my-img-" + index + "\" href='#'> "
+            $("#my-gallery-2").append(" " + targetRemoval + " <div class=\"card h-100\"> " + "<div class=\"card-header\" style=''>" + removeLink + lock_link + editLink + "</div>"
+                + "<a data-bs-toggle=\"modal\" data-bs-target=\"#staticBackdrop\" key=\"" + dict + "\" uuid=\"" + uuid + "\" onclick=\"return ViewImage($((this)));\" id=\"my-img-" + index + "\" href='#'> "
                 + "</a> " + "<div class=\"card-body\" id=\"card-body\">" + " <h5 class=\"card-title\">" + title + "</h5>" + " <div class=\"card-text\">" + description
                 + "</div> </div> </div> </div>")
 
@@ -56,6 +58,25 @@ $.ajax({
 
 });
 
+function ViewImage(value) {
+    uuid = value.attr("uuid")
+    key = value.attr("key")
+    doc = mindmaps.Document.fromObject(dictionary[key]["map"])
+    var renderer = new mindmaps.StaticCanvasRenderer();
+    var $img = renderer.renderAsPNG(doc);
+    $("#img-modal").html($img.css("display", "block").css("margin", "0 auto"))
+    $("#edit-mindmap").attr("uuid", value.attr("uuid"))
+    $("#edit-mindmap").attr("onclick", "switchDoc($(this));return false;")
+
+
+    /*     doc = mindmaps.Document.fromObject(dictionary[key]["map"])
+        var renderer = new mindmaps.StaticCanvasRenderer();
+        var $img = renderer.renderAsPNG(doc);
+        $("#img-modal").html($img.css("display", "block").css("margin", "0 auto"))
+
+        $("#edit-mindmap").attr("uuid", value.attr("uuid"))
+        $("#edit-mindmap").attr("onclick", "editMindmap($(this));return false;")*/
+}
 
 function remove(uuid) {
 
@@ -85,8 +106,7 @@ function remove(uuid) {
 
 }
 
-function switchDoc(uuid) {
-    console.log(uuid);
-    mindmaps.LocalDocumentStorage.setMainId(uuid);
+function switchDoc(value) {
+    mindmaps.LocalDocumentStorage.setMainId(value.attr("uuid"));
     document.location.href = '/'
 }
