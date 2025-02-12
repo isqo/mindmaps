@@ -95,10 +95,10 @@ class Mindmap(UserMixin):
 
             return dictionaries
 
+
     @staticmethod
     def get(customer_id, title):
         with db_cursor() as cur:
-            print("SELECT * FROM Mindmap WHERE customer_id = %s AND title = %s")
             cur.execute(
                 "SELECT * FROM Mindmap WHERE customer_id = %s AND title = %s", (customer_id, title)
             )

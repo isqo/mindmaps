@@ -119,6 +119,7 @@ mindmaps.MainViewController = function(eventBus, mindmapModel, commandRegistry) 
       var doc = mindmaps.Document.fromJSON(result);
       mindmapModel.setDocument(doc);
     } catch (e) {
+
       eventBus.publish(mindmaps.Event.NOTIFICATION_ERROR, "Could not read the file.");
       console.warn("Could not open the mind map via drag and drop.");
     }

@@ -4,6 +4,13 @@ $.ajax({
     type: 'get', url: url, contentType: "application/json; charset=utf-8", success: function (dicts) {
         index = 0;
 
+        if(Object.keys(dicts).length == 0) {
+            $("#my-gallery-2").html("<div class=\"alert alert-info  \" role=\"alert\">You don't have any private mindmap. you can create them or turn your existing ones into them after <a href='/premium'>subscription</a>.</div>")
+
+        }
+
+        console.log(dicts)
+
         for (var dict in dicts) {
             data = dicts[dict]
             map = data["map"]

@@ -56,11 +56,47 @@
                     <a class="nav-link" href="/my-private" style="color: white">Private Gallery</a>
                 </li>
                 {% endif %}
+                <li class="nav-item" style="margin-left:20px;">
+                    <a class="nav-link" href="/premium" style="color: white">Premium</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
+<!--
+ Button trigger modal
+<a  data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+</a>-->
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="row justify-content-md-center">
+    <div class="card" style="width: 18rem;">
+        <img src="{{ url_for('static',filename='img/img1.png') }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Premium (2€)</h5>
+            <p class="card-text">Premium for people who love the product and want to contribute in
+                privacy.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Unlimited private diagrams</li>
+            <li class="list-group-item">Unlimited public diagrams</li>
+            <li class="list-group-item">Auto-Save in the cloud</li>
+            <li class="list-group-item">Save on your computer</li>
+            <li class="list-group-item">Export to png</li>
+            <li class="list-group-item">Export to Json</li>
+            <li class="list-group-item">Print</li>
+        </ul>
+        <div class="card-body">
+            <a href="#" id="submitLink" class="card-link">Upgrade</a>
+            <a href="#" class="card-link">close</a>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
 
 <div class="container text-center" style="margin-top: 25px;">
     <div class="row" id="my-gallery">

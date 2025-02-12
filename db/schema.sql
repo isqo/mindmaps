@@ -22,6 +22,9 @@ CREATE TABLE Mindmap
 ALTER TABLE Mindmap
     ADD private BOOLEAN NOT NULL DEFAULT FALSE;
 
+ALTER TABLE customer
+    ADD premium BOOLEAN NOT NULL DEFAULT FALSE;
+
 CREATE TABLE StripeCustomer
 (
     id                SERIAL PRIMARY KEY,

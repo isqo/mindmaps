@@ -30,7 +30,7 @@ $.ajax({
             }
 
             removeLink = "<button type=\"button\" class=\"btn-close\" aria-label=\"Close\"" + " style=\"float: right; font-size: 10px;\" uuid=" + uuid + " href=\"#\" onClick=\"remove($(this));\" ></button>"
-            lock_link = "<a href=\"#\" uuid=" + uuid + " style='float: left; margin-right:10px;  margin-bottom: 5px; color: #14a800' onClick=\"lock($(this));\"><i class=\"fa fa-unlock-alt fa-2x\" aria-hidden=\"true\"></i></a>"
+            lock_link = "<a  href=\"#\" uuid=" + uuid + " style='float: left; margin-right:10px;  margin-bottom: 5px; color: #14a800' onClick=\"lock($(this));\"><i class=\"fa fa-unlock-alt fa-2x\" aria-hidden=\"true\"></i></a>"
 
             $("#my-gallery").append(" " + targetRemoval + " <div class=\"card h-100\"> " + "<div class=\"card-header\" style=' '>"  + removeLink + lock_link + "</div>" + "<a uuid=\"" + uuid + "\" onclick=\"return switchDoc($(this));\" id=\"my-img-" + index + "\" href='#'> " + "</a> " + "<div class=\"card-body\" id=\"card-body\">" + " <h5 class=\"card-title\">" + title + "</h5>" + " <div class=\"card-text\">" + description + "</div> </div> </div> </div>")
 
@@ -47,28 +47,50 @@ $.ajax({
 
 
 function lock(value) {
-    $.confirm({
-        title: 'Confirm!', content: 'are you sure you want to make it private?', buttons: {
-            confirm: function () {
-                url3 = mindmaps.Util.url("mindmap/private?uuid=" + value.attr("uuid"))
-
-                $.ajax({
-                    type: 'POST', url: url3, contentType: "application/json; charset=utf-8", success: function (data) {
-                        uuid = value.attr("uuid")
-                        $("[card-uuid=" + uuid + "]").remove()
-                        switchDocId(uuid, "/my-private")
 
 
-                    }, error: function (err) {
-                        console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+    url3 = mindmaps.Util.url("user/premium")
+    $.ajax({
+        type: 'GET', url: url3, contentType: "application/json; charset=utf-8", success: function (data) {
+
+            if (data.premium === true){
+
+                $.confirm({
+                    title: 'Confirm!', content: 'are you sure you want to make it private?', buttons: {
+                        confirm: function () {
+                            url3 = mindmaps.Util.url("mindmap/private?uuid=" + value.attr("uuid"))
+
+                            $.ajax({
+                                type: 'POST', url: url3, contentType: "application/json; charset=utf-8", success: function (data) {
+                                    uuid = value.attr("uuid")
+                                    $("[card-uuid=" + uuid + "]").remove()
+                                    switchDocId(uuid, "/my-private")
+
+
+                                }, error: function (err) {
+                                    console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+                                }
+
+                            });
+
+                        }, cancel: function () {
+                        }
                     }
-
                 });
 
-            }, cancel: function () {
             }
+            else
+            {
+                $('#exampleModal').modal('show');
+            }
+
+
+        }, error: function (err) {
+            console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
         }
+
     });
+
 }
 
 function remove(value) {

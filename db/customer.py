@@ -4,12 +4,14 @@ from db.db import db_cursor
 
 
 class Customer(UserMixin):
-    def     __init__(self, google_user_id, name, email, profile_pic):
+    def     __init__(self, google_user_id, name, email, profile_pic, created_timestamp, premium):
         self.id = google_user_id
         self.google_user_id = google_user_id
         self.name = name
         self.email = email
         self.profile_pic = profile_pic
+        self.created_timestamp = created_timestamp
+        self.premium = premium
 
     @staticmethod
     def get(google_user_id):
@@ -19,13 +21,12 @@ class Customer(UserMixin):
                 "SELECT * FROM customer WHERE google_user_id = %s", (google_user_id,)
             )
             customer=cur.fetchone()
-
             if not customer:
                 return None
 
         customer = Customer(
-            google_user_id=customer[1], name=customer[2], email=customer[3], profile_pic=customer[4]
-        )
+            google_user_id=customer[1], name=customer[2], email=customer[3], profile_pic=customer[4], created_timestamp= customer[5], premium=customer[6]
+         )
         return customer
 
     @staticmethod

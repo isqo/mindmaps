@@ -63,6 +63,7 @@ def before_request():
         g.user = None
 
 
+
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
@@ -165,6 +166,9 @@ def gallery():
 def myGallery():
     return render_template('mygallery.html')
 
+@app.route("/premium")
+def premium():
+    return render_template('premium.html')
 
 @app.route("/my-private")
 @login_required
@@ -239,7 +243,8 @@ def callback():
     # Create a user in your db with the information provided
     # by Google
     customer = Customer(
-        google_user_id=unique_id, name=users_name, email=users_email, profile_pic=picture
+        google_user_id=unique_id, name=users_name, email=users_email, profile_pic=picture, premium=False,
+        created_timestamp=None
     )
     # Doesn't exist? Add it to the database.
     if not Customer.get(google_user_id=unique_id):
@@ -356,20 +361,34 @@ def get_mindmaps():
     return {}
 
 
-@app.route('/mindmaps/private', methods=['GET'])
+@app.route('/user/premium', methods=['GET'])
 @login_required
-def get_mindmaps_private():
-
+def isPremium():
     user_id = None
     if current_user.is_authenticated:
         user_id = current_user.id
+    customer = Customer.get(user_id)
+    premium = customer.premium
+    if premium:
+        g.premium = True
+        return {"premium": True}
+    else:
+        g.premium = False
+        return {"premium": False}
 
 
-    maps = Mindmap.getAllPrivate(user_id)
-    if maps:
-        return maps
-
-    return {}
+@app.route('/mindmaps/private', methods=['GET'])
+@login_required
+def get_mindmaps_private():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    data = isPremium()
+    maps = {}
+    if data['premium']:
+        g.is_premium = True
+        maps = Mindmap.getAllPrivate(user_id)
+    return maps
 
 
 @app.route('/mindmap/remove', methods=['DELETE'])
