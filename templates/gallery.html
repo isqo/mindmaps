@@ -43,6 +43,12 @@
           <a class="nav-link" href="/login" style="color: white">Login</a>
         </li>
         {% endif %}
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/user/profile"
+             style="color: white;margin-left:20px;">Profile</a>
+        </li>
+        {% endif %}
         <li class="nav-item" style="margin-left:20px;">
           <a class="nav-link" href="/gallery" style="color: white">Gallery</a>
         </li>
@@ -131,7 +137,6 @@
 <script src="js/AutoSaveController.js"></script>
 <script src="js/FilePicker.js"></script>
 <script src="js/PublicGallery.js"></script>
-<script src="js/PrivateGallery.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>

@@ -161,6 +161,10 @@ def gallery():
     return render_template('gallery.html')
 
 
+@app.route("/user/profile")
+def profile():
+    return render_template('my_profile.html')
+
 @app.route("/my-gallery")
 @login_required
 def myGallery():
@@ -344,7 +348,7 @@ def get_my_mindmaps():
 
     private = request.args.get('private')
 
-    maps = Mindmap.getAllByCustomer(customer_id=user_id, private=private)
+    maps = Mindmap.getAllByCustomerAndPrivacy(customer_id=user_id, private=private)
     print(len(maps))
     if maps:
         return maps
@@ -360,6 +364,17 @@ def get_mindmaps():
 
     return {}
 
+@app.route('/mindmaps/all', methods=['GET'])
+def get_mindmaps_all():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+    maps = Mindmap.getAllByCustomer(user_id)
+    if maps:
+        return maps
+
+    return {}
 
 @app.route('/user/premium', methods=['GET'])
 @login_required

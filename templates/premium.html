@@ -37,7 +37,12 @@
                     <a class="nav-link" href="/login" style="color: white">Login</a>
                 </li>
                 {% endif %}
-                <li class="nav-item" style="margin-left:20px;">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/user/profile"
+                       style="color: white;margin-left:20px;">Profile</a>
+                </li>
+                {% endif %}                <li class="nav-item" style="margin-left:20px;">
                     <a class="nav-link" href="/gallery" style="color: white">Gallery</a>
                 </li>
                 {% if current_user.is_authenticated %}

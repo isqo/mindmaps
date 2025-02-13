@@ -15,7 +15,7 @@ $.ajax({
             doc = mindmaps.Document.fromObject(dicts[key]["map"])
             var $img = renderer.renderAsPNG(doc);
             uuid = dicts[key]["uuid"]
-
+            user_name =dicts[key]["user_name"]
             card = " <div class=\"col-lg-3 col-sm-6\" style=\"margin-bottom: 10px\"> " +
                 "<div class=\"card h-100\"> "
                 + "<a data-bs-toggle=\"modal\" data-bs-target=\"#staticBackdrop\"" +
@@ -24,7 +24,8 @@ $.ajax({
                 "<img class=\"card-img-top\" alt=\"...\"></a>" +
                 " <div class=\"card-body\"> "
                 + "<h5 class=\"card-title\">" + title +
-                "</h5> <p class=\"card-text\" style=\"white-space: nowrap;overflow: hidden;\">" + description + "</p> " +
+                "</h5> <p class=\"card-text\" style=\"white-space: nowrap;overflow: hidden;\">" + description +
+                "</p>   <a style='float: left;' href=\"/user/profile\" class=\"card-link\">@"+ user_name+ "</a> " +
                 "</div>  </div> </div>"
 
             $("#gallery").append(card)

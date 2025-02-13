@@ -48,7 +48,7 @@ class Mindmap(UserMixin):
         return mindmap
 
     @staticmethod
-    def getAllByCustomer(customer_id, private):
+    def getAllByCustomerAndPrivacy(customer_id, private):
         with db_cursor() as cur:
             cur.execute(
                 "SELECT * FROM mindmap WHERE customer_id = %s and private =  %s;", (customer_id, private,)
@@ -75,7 +75,8 @@ class Mindmap(UserMixin):
     def getAll():
         with db_cursor() as cur:
             cur.execute(
-                "SELECT * FROM Mindmap WHERE private = false",
+                "SELECT M.id, uuid,customer_id,title, description,map,google_user_id,name,private " +
+                "FROM Mindmap M LEFT JOIN customer C on M.customer_id = C.google_user_id WHERE private = false"
             )
             rows = cur.fetchall()
 
@@ -91,10 +92,40 @@ class Mindmap(UserMixin):
                 dictionary["title"] = row[3]
                 dictionary["description"] = row[4]
                 dictionary["map"] = row[5]
+                dictionary["user_id"] = row[6]
+                dictionary["user_name"] = row[7]
                 dictionaries[dictionary["id"]] = dictionary
 
             return dictionaries
 
+    @staticmethod
+    def getAllByCustomer(customer_id):
+        with db_cursor() as cur:
+            cur.execute(
+                "SELECT M.id, uuid,customer_id,title, description,map,google_user_id,name, profile_pic FROM Mindmap M " +
+                "LEFT JOIN customer C on M.customer_id = C.google_user_id " +
+                "where customer_id = '%s' and private =  false" % (customer_id))
+
+            rows = cur.fetchall()
+
+            if not rows:
+                return None
+
+            dictionaries = {}
+            for row in rows:
+                dictionary = {}
+                dictionary["id"] = row[0]
+                dictionary["uuid"] = row[1]
+                dictionary["customer_id"] = row[2]
+                dictionary["title"] = row[3]
+                dictionary["description"] = row[4]
+                dictionary["map"] = row[5]
+                dictionary["user_id"] = row[6]
+                dictionary["user_name"] = row[7]
+                dictionary["profile_pic"] = row[8]
+                dictionaries[dictionary["id"]] = dictionary
+
+            return dictionaries
 
     @staticmethod
     def get(customer_id, title):
