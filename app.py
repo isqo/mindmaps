@@ -383,7 +383,6 @@ def get_mindmaps_all():
     return {}
 
 @app.route('/mindmaps/all/<user_id>', methods=['GET'])
-@login_required
 def get_mindmaps_all_by_customer(user_id):
 
     maps = Mindmap.getAllByCustomer(user_id)
