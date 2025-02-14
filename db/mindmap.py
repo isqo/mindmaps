@@ -75,8 +75,8 @@ class Mindmap(UserMixin):
     def getAll():
         with db_cursor() as cur:
             cur.execute(
-                "SELECT M.id, uuid,customer_id,title, description,map,google_user_id,name,private " +
-                "FROM Mindmap M LEFT JOIN customer C on M.customer_id = C.google_user_id WHERE private = false"
+                "SELECT M.id, uuid,customer_id,title, description,map,user_id,name,private " +
+                "FROM Mindmap M LEFT JOIN customer C on M.customer_id = C.user_id WHERE private = false"
             )
             rows = cur.fetchall()
 
@@ -102,8 +102,8 @@ class Mindmap(UserMixin):
     def getAllByCustomer(customer_id):
         with db_cursor() as cur:
             cur.execute(
-                "SELECT M.id, uuid,customer_id,title, description,map,google_user_id,name, profile_pic FROM Mindmap M " +
-                "LEFT JOIN customer C on M.customer_id = C.google_user_id " +
+                "SELECT M.id, uuid,customer_id,title, description,map,user_id,name, profile_pic FROM Mindmap M " +
+                "LEFT JOIN customer C on M.customer_id = C.user_id " +
                 "where customer_id = '%s' and private =  false" % (customer_id))
 
             rows = cur.fetchall()

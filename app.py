@@ -30,6 +30,8 @@ GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
 
+GITHUB_CLIENT_ID = os.environ.get("GITHUB_CLIENT_ID", None)
+GITHUB_CLIENT_SECRET = os.environ.get("GITHUB_CLIENT_SECRET", None)
 # Stripe
 
 stripe_keys = {
@@ -61,7 +63,6 @@ def before_request():
         g.user = current_user.get_id()
     else:
         g.user = None
-
 
 
 # Flask-Login helper to retrieve a user from our db
@@ -156,6 +157,11 @@ def index():
         return render_template('index.html')
 
 
+@app.route("/loginpage")
+def loginpage():
+    return render_template('login.html')
+
+
 @app.route("/gallery")
 def gallery():
     return render_template('gallery.html')
@@ -165,14 +171,17 @@ def gallery():
 def my_profile():
     return render_template('my_profile.html')
 
+
 @app.route("/my-gallery")
 @login_required
 def myGallery():
     return render_template('mygallery.html')
 
+
 @app.route("/premium")
 def premium():
     return render_template('premium.html')
+
 
 @app.route("/my-private")
 @login_required
@@ -182,6 +191,11 @@ def myPrivate():
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
+
+
+@app.route("/test")
+def test():
+    return '<a href="https://github.com/login/oauth/authorize?client_id=Iv23limtsjxpudl4H0ki">Login with GitHub</a>'
 
 
 @app.route("/login")
@@ -199,6 +213,67 @@ def login():
     )
     return redirect(request_uri)
 
+
+def user_info(token):
+    return {}
+
+
+@app.route("/github/callback")
+def github_callback():
+    print("callback")
+    # Get authorization code Google sent back to you
+    code = request.args.get("code")
+    # Find out what URL to hit to get tokens that allow you to ask for
+    # things on behalf of a user
+
+    body = {
+        "client_id": GITHUB_CLIENT_ID,
+        "client_secret": GITHUB_CLIENT_SECRET,
+        "code": code
+    }
+
+    token_response = requests.post(
+        "https://github.com/login/oauth/access_token",
+        headers={
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data=json.dumps(body),
+        auth=(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET),
+    )
+
+    data = json.loads(token_response.text)
+    token = data['access_token']
+
+    headers = {"Authorization": "Bearer " + token, "Accept": "application/json", "Content-Type": "application/json"}
+    user_info= requests.get("https://api.github.com/user", headers=headers)
+    user_data = json.loads(user_info.text)
+
+    print(user_data["login"])
+    print(user_data["id"])
+    print(user_data["node_id"])
+    print(user_data["avatar_url"])
+    print(user_data["name"])
+
+
+    return redirect(url_for("index"))
+
+
+# Create the tokens we will be sending back to the user
+# access_token = create_access_token(identity=users_name)
+# refresh_token = create_refresh_token(identity=users_name)
+
+# Set the JWTs and the CSRF double submit protection cookies
+# in this response
+# resp = jsonify({'login': True})
+# set_access_cookies(resp, access_token)
+# set_refresh_cookies(resp, refresh_token)
+
+# Begin user session by logging the user in
+# response = make_response(redirect(url_for("index")))
+# response.set_cookie('access_token', access_token)
+# response.set_cookie('refresh_token', refresh_token)
+# return redirect(url_for("index"))
 
 @app.route("/login/callback")
 def callback():
@@ -247,11 +322,11 @@ def callback():
     # Create a user in your db with the information provided
     # by Google
     customer = Customer(
-        google_user_id=unique_id, name=users_name, email=users_email, profile_pic=picture, premium=False,
+        user_id=unique_id, name=users_name, email=users_email, profile_pic=picture, premium=False,
         created_timestamp=None
     )
     # Doesn't exist? Add it to the database.
-    if not Customer.get(google_user_id=unique_id):
+    if not Customer.get(user_id=unique_id):
         Customer.create(unique_id, users_name, users_email, picture)
 
     # Create the tokens we will be sending back to the user
@@ -355,12 +430,14 @@ def get_my_mindmaps():
 
     return {}
 
+
 @app.route("/user/profile/<id>")
 def profile(id):
     context = {
         'user_id': id
     }
     return render_template("profile.html", **context)
+
 
 @app.route('/mindmaps', methods=['GET'])
 def get_mindmaps():
@@ -369,6 +446,7 @@ def get_mindmaps():
         return maps
 
     return {}
+
 
 @app.route('/mindmaps/all', methods=['GET'])
 def get_mindmaps_all():
@@ -382,14 +460,15 @@ def get_mindmaps_all():
 
     return {}
 
+
 @app.route('/mindmaps/all/<user_id>', methods=['GET'])
 def get_mindmaps_all_by_customer(user_id):
-
     maps = Mindmap.getAllByCustomer(user_id)
     if maps:
         return maps
 
     return {}
+
 
 @app.route('/user/premium', methods=['GET'])
 @login_required

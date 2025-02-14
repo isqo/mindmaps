@@ -4,9 +4,9 @@ from db.db import db_cursor
 
 
 class Customer(UserMixin):
-    def     __init__(self, google_user_id, name, email, profile_pic, created_timestamp, premium):
-        self.id = google_user_id
-        self.google_user_id = google_user_id
+    def     __init__(self, user_id, name, email, profile_pic, created_timestamp, premium):
+        self.id = user_id
+        self.user_id = user_id
         self.name = name
         self.email = email
         self.profile_pic = profile_pic
@@ -14,26 +14,26 @@ class Customer(UserMixin):
         self.premium = premium
 
     @staticmethod
-    def get(google_user_id):
+    def get(user_id):
 
         with db_cursor() as cur:
             cur.execute(
-                "SELECT * FROM customer WHERE google_user_id = %s", (google_user_id,)
+                "SELECT * FROM customer WHERE user_id = %s", (user_id,)
             )
             customer=cur.fetchone()
             if not customer:
                 return None
 
         customer = Customer(
-            google_user_id=customer[1], name=customer[2], email=customer[3], profile_pic=customer[4], created_timestamp= customer[5], premium=customer[6]
+            user_id=customer[1], name=customer[2], email=customer[3], profile_pic=customer[4], created_timestamp= customer[5], premium=customer[6]
          )
         return customer
 
     @staticmethod
-    def create(google_user_id, name, email, profile_pic):
+    def create(user_id, name, email, profile_pic):
         with db_cursor() as cur:
             cur.execute(
-                "INSERT INTO customer (google_user_id, name, email, profile_pic) "
+                "INSERT INTO customer (user_id, name, email, profile_pic) "
                 "VALUES (%s, %s, %s, %s)",
-                (google_user_id, name, email, profile_pic),
+                (user_id, name, email, profile_pic),
             )

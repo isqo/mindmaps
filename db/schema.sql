@@ -32,3 +32,9 @@ CREATE TABLE StripeCustomer
     stripeCustomerId       VARCHAR(255) 		NOT NULL,
     stripeSubscriptionId             VARCHAR(255) NOT NULL
 );
+
+ALTER TABLE customer
+    ADD origin VARCHAR(255) NOT NULL;
+
+ALTER TABLE customer
+    RENAME COLUMN google_user_id TO user_id;
