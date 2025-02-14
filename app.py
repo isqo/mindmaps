@@ -121,7 +121,7 @@ def handle_checkout_session(session):
 
 @app.route("/create-checkout-session")
 def create_checkout_session():
-    domain_url = "http://localhost:5000/"
+    domain_url = "https://treemap.services/"
     stripe.api_key = stripe_keys["secret_key"]
 
     try:
@@ -162,7 +162,7 @@ def gallery():
 
 
 @app.route("/user/profile")
-def profile():
+def my_profile():
     return render_template('my_profile.html')
 
 @app.route("/my-gallery")
@@ -355,6 +355,12 @@ def get_my_mindmaps():
 
     return {}
 
+@app.route("/user/profile/<id>")
+def profile(id):
+    context = {
+        'user_id': id
+    }
+    return render_template("profile.html", **context)
 
 @app.route('/mindmaps', methods=['GET'])
 def get_mindmaps():
@@ -369,6 +375,16 @@ def get_mindmaps_all():
     user_id = None
     if current_user.is_authenticated:
         user_id = current_user.id
+
+    maps = Mindmap.getAllByCustomer(user_id)
+    if maps:
+        return maps
+
+    return {}
+
+@app.route('/mindmaps/all/<user_id>', methods=['GET'])
+@login_required
+def get_mindmaps_all_by_customer(user_id):
 
     maps = Mindmap.getAllByCustomer(user_id)
     if maps:

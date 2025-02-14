@@ -1,11 +1,12 @@
+user_id=$("#user_id").val()
 dictionary = {}
-url = mindmaps.Util.url("/mindmaps/all")
+url = mindmaps.Util.url("mindmaps/all/"+user_id)
 $.ajax({
     type: 'get',
     url: url,
     contentType: "application/json; charset=utf-8",
     success: function (dicts) {
-
+        console.log(dicts)
         dictionary = dicts;
         for (var key in dicts) {
 
@@ -18,23 +19,25 @@ $.ajax({
             user_id = dicts[key]["user_id"]
             user_name = dicts[key]["user_name"]
             profile_pic = dicts[key]["profile_pic"]
+
+
             var renderer = new mindmaps.StaticCanvasRenderer();
             doc = mindmaps.Document.fromObject(dicts[key]["map"])
             var $img = renderer.renderAsPNG(doc);
 
-            mindmap = " <div class=\"col-md-6\" style=\"margin-top: 10px;\">\n" +
-            "                    <div class=\"card\">\n" +
-            "                        <div id=\"img-"+id+"\"></div>" +
-            "                        <div class=\"card-body\">\n" +
-            "                            <h5 class=\"card-title\">" + title + "</h5>\n" +
-            "                            <p class=\"card-text\" >"+ description +"</p>\n" +
-            "                            <a href=\"/\" uuid=\""+uuid+"\" onclick=\"switchDoc($(this)); return false;\" class=\"btn btn-primary\">Open your mindmap</a>\n" +
-            "                        </div>\n" +
-            "                    </div>\n" +
-            "                </div>"
+            mindmap = " <div class=\"col-md-3\" style=\"margin-top: 10px;\">\n" +
+                "                    <div class=\"card\">\n" +
+                "                        <div id=\"img-"+id+"\"></div>" +
+                "                        <div class=\"card-body\">\n" +
+                "                            <h5 class=\"card-title\">" + title + "</h5>\n" +
+                "                            <p class=\"card-text\" >"+ description +"</p>\n" +
+                "                            <a href=\"/\" uuid=\""+uuid+"\" onclick=\"switchDoc($(this)); return false;\" class=\"btn btn-primary\">Open your mindmap</a>\n" +
+                "                        </div>\n" +
+                "                    </div>\n" +
+                "                </div>"
 
-             $("#mindmaps").append(mindmap)
-             $("#img-" + key).html($img.css("height", "200px").css("width", "200px"))
+            $("#mindmaps").append(mindmap)
+            $("#img-" + key).html($img.css("height", "200px").css("width", "200px"))
         }
 
 
@@ -47,13 +50,11 @@ $.ajax({
             "                    <li class=\"list-group-item\">"+user_name+"</li>\n" +
             "                </ul>\n" +
             "                <div class=\"card-body\">\n" +
-            "                    <a href=\"/gallery\" class=\"card-link\">Gallery</a>\n" +
-            "                    <a href=\"/my-gallery\" class=\"card-link\">My Gallery</a>\n" +
             "                </div>\n" +
             "                <div class=\"list-group\" id=\"list-tab\" role=\"tablist\">\n" +
             "                    <a class=\"list-group-item list-group-item-action active\" id=\"list-home-list\" data-toggle=\"list\" href=\"/\" role=\"tab\" aria-controls=\"home\">Home</a>\n" +
-/*            "                    <a class=\"list-group-item list-group-item-action\" id=\"list-messages-list\" data-toggle=\"list\" href=\"#list-messages\" role=\"tab\" aria-controls=\"messages\">Messages</a>\n" +
-            "                    <a class=\"list-group-item list-group-item-action\" id=\"list-settings-list\" data-toggle=\"list\" href=\"#list-settings\" role=\"tab\" aria-controls=\"settings\">Settings</a>\n" +*/
+            /*            "                    <a class=\"list-group-item list-group-item-action\" id=\"list-messages-list\" data-toggle=\"list\" href=\"#list-messages\" role=\"tab\" aria-controls=\"messages\">Messages</a>\n" +
+                        "                    <a class=\"list-group-item list-group-item-action\" id=\"list-settings-list\" data-toggle=\"list\" href=\"#list-settings\" role=\"tab\" aria-controls=\"settings\">Settings</a>\n" +*/
             "                </div>\n" +
             "            </div>"
 
@@ -71,14 +72,14 @@ $.ajax({
 
 function ViewImage(value) {
     alert("switchDoc")
-/*    key = value.attr("key")
+    /*    key = value.attr("key")
 
-    doc = mindmaps.Document.fromObject(dictionary[key]["map"])
-    var renderer = new mindmaps.StaticCanvasRenderer();
-    var $img = renderer.renderAsPNG(doc);
-    $("#img-modal").html($img.css("display", "block").css("margin", "0 auto"))
-    $("#edit-mindmap").attr("uuid", value.attr("uuid"))
-    $("#edit-mindmap").attr("onclick", "editMindmap($(this));return false;")*/
+        doc = mindmaps.Document.fromObject(dictionary[key]["map"])
+        var renderer = new mindmaps.StaticCanvasRenderer();
+        var $img = renderer.renderAsPNG(doc);
+        $("#img-modal").html($img.css("display", "block").css("margin", "0 auto"))
+        $("#edit-mindmap").attr("uuid", value.attr("uuid"))
+        $("#edit-mindmap").attr("onclick", "editMindmap($(this));return false;")*/
 }
 
 
