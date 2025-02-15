@@ -59,6 +59,6 @@ class Customer(UserMixin):
         with db_cursor() as cur:
             cur.execute(
                 "INSERT INTO customer (user_id, name, email, profile_pic, origin) "
-                "VALUES (%s, %s, %s, %s %s)",
+                "VALUES (%s, %s, %s, %s, %s)",
                 (user_id, name, email, profile_pic, origin),
             )
