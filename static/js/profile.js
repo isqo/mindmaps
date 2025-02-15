@@ -30,7 +30,7 @@ $.ajax({
                 "                        <div id=\"img-"+id+"\"></div>" +
                 "                        <div class=\"card-body\">\n" +
                 "                            <h5 class=\"card-title\">" + title + "</h5>\n" +
-                "                            <p class=\"card-text\" >"+ description +"</p>\n" +
+                "                            <p class=\"card-text\" style='overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;line-clamp: 2;-webkit-box-orient: vertical;'>"+ description +"</p>\n" +
                 "                            <a href=\"/\" uuid=\""+uuid+"\" onclick=\"switchDoc($(this)); return false;\" class=\"btn btn-primary\">Open your mindmap</a>\n" +
                 "                        </div>\n" +
                 "                    </div>\n" +

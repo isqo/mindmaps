@@ -78,17 +78,20 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Login</h5>
-                            <p class="card-text">Chose between the reliable ways to login, you have google and facebook for now.</p>
-                            <a type="button" href="/login" class="btn btn-outline-success  rounded"><img style="width: 40px; height: 40px; float: left; margin-left: 10px;" src="{{ url_for('static',filename='img/google-icon.png') }}">
+                            <p class="card-text">Chose between the reliable ways to login, you have Google and Github for now.</p>
+                            <a href="/login" class="btn btn-outline-success rounded" style="width: 100%; --bs-btn-hover-bg:#14a800;--bs-btn-border-color: #cdc7c7;--bs-btn-color:black;"><img style="width: 40px; height: 40px; float: left; margin-left: 10px;" src="{{ url_for('static',filename='img/google-icon.png') }}">
                                 <p style="font-weight: bold;font-size:14px;text-align: center;margin-top: 12px;margin-right: 10px;">
                                     Login with Google
                                 </p>
                             </a>
-                            <a type="button" class="btn btn-outline-success rounded"><img style="width: 30px; height: 30px; float: left; margin-left: 10px;margin-top: 5px;" src="{{ url_for('static',filename='img/facebook-icon.webp') }}">
-                                <p style="font-weight: bold;font-size:14px;text-align: center;margin-top: 12px;margin-right: 10px;">
-                                    Login with Facebook
-                                </p></a>
                         </div>
+                    <div class="card-body" style="margin-top: -12px;">
+                        <a class="btn btn-outline-success rounded" href="https://github.com/login/oauth/authorize?client_id=Iv23limtsjxpudl4H0ki" style="width: 100%;--bs-btn-color:black;--bs-btn-hover-bg:#14a800;--bs-btn-border-color :#cdc7c7; "><img style="width: 30px; height: 30px; float: left; margin-left: 17px;margin-top: 5px;" src="{{ url_for('static',filename='img/github-icon.png') }}">
+                            <p style="font-weight: bold;font-size:14px;text-align: center;margin-top: 12px;margin-right: 10px;">
+                                Login with Github
+                            </p>
+                        </a>
+                    </div>
                     </div>
 
 

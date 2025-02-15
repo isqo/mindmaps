@@ -13,7 +13,7 @@ $.ajax({
             var $img = renderer.renderAsPNG(doc);
             uuid = dicts[key]["uuid"]
             user_name = dicts[key]["user_name"]
-            card = " <div class=\"col-lg-3 col-sm-6\" style=\"margin-bottom: 10px\"> " + "<div class=\"card h-100\"> " + "<a data-bs-toggle=\"modal\" data-bs-target=\"#staticBackdrop\"" + " href=\"#\" uuid=\"" + uuid + "\" key=\"" + key + "\" id=\"img-" + key + "\" " + "onclick=\"ViewImage($(this));return false;\">" + "<img class=\"card-img-top\" alt=\"...\"></a>" + " <div class=\"card-body\"> " + "<h5 class=\"card-title\">" + title + "</h5> <p class=\"card-text\" style=\"white-space: nowrap;overflow: hidden;\">" + description +
+            card = " <div class=\"col-lg-3 col-sm-6\" style=\"margin-bottom: 10px\"> " + "<div class=\"card h-100\" style='border 0;    box-shadow: 0 0.25rem 1rem rgba(48, 55, 66, .15);'> " + "<a data-bs-toggle=\"modal\" data-bs-target=\"#staticBackdrop\"" + " href=\"#\" uuid=\"" + uuid + "\" key=\"" + key + "\" id=\"img-" + key + "\" " + "onclick=\"ViewImage($(this));return false;\">" + "<img class=\"card-img-top\" alt=\"...\"></a>" + " <div class=\"card-body\"> " + "<h5 class=\"card-title\">" + title + "</h5> <p class=\"card-text\" style=\"white-space: nowrap;overflow: hidden;\">" + description +
                 "</p>   <a style='float: left;' href=\"/user/profile/" + user_id + "\" class=\"card-link\">@" + user_name + "</a> "
                 + "</div>  </div> </div>"
 

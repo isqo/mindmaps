@@ -45,7 +45,7 @@ stripe.api_key = stripe_keys["secret_key"]
 
 # Flask app setup
 app = Flask(__name__, static_url_path='/')
-app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
+app.secret_key = os.environ.get("JWT_SECRET_KEY")
 jwt = JWTManager(app)
 
 # User session management setup
@@ -192,12 +192,6 @@ def myPrivate():
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
-
-@app.route("/test")
-def test():
-    return '<a href="https://github.com/login/oauth/authorize?client_id=Iv23limtsjxpudl4H0ki">Login with GitHub</a>'
-
-
 @app.route("/login")
 def login():
     # Find out what URL to hit for Google login
@@ -206,9 +200,10 @@ def login():
 
     # Use library to construct the request for Google login and provide
     # scopes that let you retrieve user's profile from Google
+    print(request.base_url)
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
+        redirect_uri=request.base_url + "/google/callback",
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)
@@ -218,9 +213,8 @@ def user_info(token):
     return {}
 
 
-@app.route("/github/callback")
+@app.route("/login/github/callback")
 def github_callback():
-    print("callback")
     # Get authorization code Google sent back to you
     code = request.args.get("code")
     # Find out what URL to hit to get tokens that allow you to ask for
@@ -231,7 +225,6 @@ def github_callback():
         "client_secret": GITHUB_CLIENT_SECRET,
         "code": code
     }
-
     token_response = requests.post(
         "https://github.com/login/oauth/access_token",
         headers={
@@ -241,20 +234,29 @@ def github_callback():
         data=json.dumps(body),
         auth=(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET),
     )
-
     data = json.loads(token_response.text)
-    token = data['access_token']
+    token = None
+    if "access_token" in data:
+        token = data['access_token']
+    else:
+        raise Exception("Sorry, access token not present")
 
     headers = {"Authorization": "Bearer " + token, "Accept": "application/json", "Content-Type": "application/json"}
-    user_info= requests.get("https://api.github.com/user", headers=headers)
+    user_info = requests.get("https://api.github.com/user", headers=headers)
     user_data = json.loads(user_info.text)
 
-    print(user_data["login"])
-    print(user_data["id"])
-    print(user_data["node_id"])
-    print(user_data["avatar_url"])
-    print(user_data["name"])
+    customer = Customer(
+        user_id=str(user_data["id"]), name=user_data["name"], email=user_data["email"],
+        profile_pic=user_data["avatar_url"],
+        premium=False,
+        created_timestamp=None, origin="github"
+    )
 
+    if not Customer.get(user_id=str(user_data["id"])):
+        Customer.create(str(user_data["id"]), user_data["name"], user_data["login"], user_data["avatar_url"],
+                        origin="github")
+
+    login_user(customer)
 
     return redirect(url_for("index"))
 
@@ -275,7 +277,7 @@ def github_callback():
 # response.set_cookie('refresh_token', refresh_token)
 # return redirect(url_for("index"))
 
-@app.route("/login/callback")
+@app.route("/login/google/callback")
 def callback():
     # Get authorization code Google sent back to you
     code = request.args.get("code")
@@ -323,7 +325,7 @@ def callback():
     # by Google
     customer = Customer(
         user_id=unique_id, name=users_name, email=users_email, profile_pic=picture, premium=False,
-        created_timestamp=None
+        created_timestamp=None, origin="google"
     )
     # Doesn't exist? Add it to the database.
     if not Customer.get(user_id=unique_id):
@@ -340,8 +342,7 @@ def callback():
     # set_refresh_cookies(resp, refresh_token)
 
     # Begin user session by logging the user in
-    value = login_user(customer)
-    print(value)
+    login_user(customer)
     # response = make_response(redirect(url_for("index")))
     # response.set_cookie('access_token', access_token)
     # response.set_cookie('refresh_token', refresh_token)
@@ -424,7 +425,7 @@ def get_my_mindmaps():
     private = request.args.get('private')
 
     maps = Mindmap.getAllByCustomerAndPrivacy(customer_id=user_id, private=private)
-    print(len(maps))
+
     if maps:
         return maps
 
@@ -447,17 +448,25 @@ def get_mindmaps():
 
     return {}
 
+@app.route('/user/info', methods=['GET'])
+@login_required
+def user_info():
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+    customer = Customer.getDict(user_id)
+
+    return customer
 
 @app.route('/mindmaps/all', methods=['GET'])
 def get_mindmaps_all():
     user_id = None
     if current_user.is_authenticated:
         user_id = current_user.id
-
     maps = Mindmap.getAllByCustomer(user_id)
     if maps:
         return maps
-
     return {}
 
 

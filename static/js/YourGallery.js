@@ -3,6 +3,9 @@ url = mindmaps.Util.url("mindmaps/mine?private=false")
 $.ajax({
     type: 'get', url: url, contentType: "application/json; charset=utf-8", success: function (dicts) {
         dictionary = dicts
+        if(Object.keys(dicts).length == 0) {
+           $("#my-gallery").html("<div class=\"alert alert-info  \" role=\"alert\">You don't have any  mindmap. you can create them and edit them <a href='/'>here</a></div>")
+        }
         for (var dict in dicts) {
             data = dicts[dict]
             map = data["map"]
